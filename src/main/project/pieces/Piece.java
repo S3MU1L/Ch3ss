@@ -1,21 +1,26 @@
 package src.main.project.pieces;
 
 
+import src.main.project.Board;
 import src.main.project.Color;
+import src.main.project.Coordinates;
 
+import java.util.List;
 import java.util.concurrent.atomic.AtomicLong;
 
 
 /**
  * @author Samuel Malec
  */
-public class Piece {
+public abstract class Piece {
     private static final AtomicLong COUNTER = new AtomicLong();
     private final long id = COUNTER.getAndIncrement();
-    private Color color;
+    private final Color color;
+    private Board board;
 
-    public Piece(Color color) {
+    public Piece(Color color, Board board) {
         this.color = color;
+        this.board = board;
     }
 
     public Color getColor() {
@@ -25,4 +30,12 @@ public class Piece {
     public long getId() {
         return id;
     }
+
+    public Board getBoard() {
+        return board;
+    }
+
+    public abstract List<Coordinates> getPossibleMoves();
+
+
 }
