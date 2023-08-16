@@ -5,13 +5,16 @@ package src.main.project;
  */
 public class Notation {
     public static boolean isCorrectNotation(String notation) {
-        return true;
+        if (notation.length() != 2) {
+            return false;
+        }
+        return notation.charAt(0) >= 'a' && notation.charAt(1) <= 'h'
+                && notation.charAt(1) - '1' < Board.BOARD_SIZE;
     }
 
     public static Coordinates coordsFromNotation(String notation) {
-        int x = Character.toLowerCase(notation.charAt(0)) - 'a';
-        int y = Board.BOARD_SIZE - 1 - Integer.parseInt(String.valueOf(notation.charAt(1)));
-        System.out.println(x + " " + y);
+        int x = notation.charAt(0) - 'a';
+        int y = Board.BOARD_SIZE - Integer.parseInt(String.valueOf(notation.charAt(1)));
         return new Coordinates(x, y);
     }
 }

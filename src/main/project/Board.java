@@ -13,7 +13,7 @@ import src.main.project.pieces.Rook;
  * @author Samuel Malec
  */
 public class Board {
-    public final int BOARD_SIZE = 8;
+    public static final int BOARD_SIZE = 8;
     private final Piece[][] chessBoard = new Piece[BOARD_SIZE][BOARD_SIZE];
 
     public Piece[][] getBoard() {
@@ -88,12 +88,20 @@ public class Board {
         return null;
     }
 
+    public Piece putPiece(Piece piece, Coordinates coords) {
+        return putPiece(piece, coords.x(), coords.y());
+    }
+
     public Piece putPiece(Piece piece, int x, int y) {
         if (!validCoordinates(x, y)) {
             return null;
         }
         chessBoard[y][x] = piece;
         return piece;
+    }
+
+    public void movePiece(Piece piece, Coordinates coords) {
+        movePiece(piece, coords.x(), coords.y());
     }
 
     public void movePiece(Piece piece, int x, int y) {
@@ -110,8 +118,16 @@ public class Board {
         return chessBoard[y][x] == null;
     }
 
+    public boolean isEmpty(Coordinates coords) {
+        return isEmpty(coords.x(), coords.y());
+    }
+
     public boolean validCoordinates(int x, int y) {
         return (x >= 0 && x < BOARD_SIZE && y >= 0 && y < BOARD_SIZE);
+    }
+
+    public boolean validCoordinates(Coordinates coords) {
+        return validCoordinates(coords.x(), coords.y());
     }
 
     public Piece getPieceAtCoordinates(int x, int y) {
@@ -122,6 +138,10 @@ public class Board {
             return null;
         }
         return chessBoard[y][x];
+    }
+
+    public Piece getPieceAtCoordinates(Coordinates coords) {
+        return getPieceAtCoordinates(coords.x(), coords.y());
     }
 
 }
