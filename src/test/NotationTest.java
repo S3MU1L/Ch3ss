@@ -20,7 +20,7 @@ public class NotationTest {
                 coords = new Coordinates(x, y);
                 StringBuilder sb = new StringBuilder();
                 sb.append((char) ('a' + x));
-                sb.append(y + 1);
+                sb.append(Board.BOARD_SIZE - y);
                 assertEquals(Notation.coordsFromNotation(sb.toString()), coords);
             }
         }

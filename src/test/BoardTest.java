@@ -18,7 +18,7 @@ public class BoardTest {
 
     @Test
     void putPieceAtBoard() {
-        var piece = new King(Color.WHITE);
+        var piece = new King(Color.WHITE, board);
         assertNull(board.putPiece(piece, 3892189, 43829482));
         assertEquals(board.putPiece(piece, 3, 3).getId(), piece.getId());
     }
@@ -27,7 +27,7 @@ public class BoardTest {
     void getPieceAtCoordinates() {
         assertNull(board.getPieceAtCoordinates(5, 5));
         assertNull(board.getPieceAtCoordinates(2, 3));
-        var piece = new Queen(Color.BLACK);
+        Queen piece = new Queen(Color.BLACK, board);
         assertEquals(board.putPiece(piece, 4, 0).getId(), piece.getId());
         assertEquals(board.getPieceAtCoordinates(4, 0).getId(), piece.getId());
     }
