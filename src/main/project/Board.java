@@ -22,40 +22,42 @@ public class Board {
 
     public void initializeBoard() {
         for (int x = 0; x < BOARD_SIZE; x++) {
-            chessBoard[1][x] = new Pawn(Color.BLACK);
-            chessBoard[6][x] = new Pawn(Color.WHITE);
+            chessBoard[1][x] = new Pawn(Color.BLACK, this);
+            chessBoard[6][x] = new Pawn(Color.WHITE, this);
         }
 
-        for (int x = 0; x < BOARD_SIZE; x++) {
-            switch (x) {
-                case 0, 7 -> {
-                    chessBoard[0][x] = new Rook(Color.BLACK);
-                    chessBoard[7][x] = new Rook(Color.WHITE);
-                }
-                case 1, 6 -> {
-                    chessBoard[0][x] = new Knight(Color.BLACK);
-                    chessBoard[7][x] = new Knight(Color.WHITE);
-                }
-                case 2, 5 -> {
-                    chessBoard[0][x] = new Bishop(Color.BLACK);
-                    chessBoard[7][x] = new Bishop(Color.WHITE);
-                }
+        for (int i = 0; i < BOARD_SIZE; i++) {
+            if (i == 0 || i == 7) {
+                putPiece(new Rook(Color.BLACK, this), i, 0);
+                putPiece(new Rook(Color.WHITE, this), i, 7);
+            }
+            if (i == 1 || i == 6) {
+                putPiece(new Knight(Color.BLACK, this), i, 0);
+                putPiece(new Knight(Color.WHITE, this), i, 7);
+            }
+            if (i == 2 || i == 5) {
+                putPiece(new Bishop(Color.BLACK, this), i, 0);
+                putPiece(new Bishop(Color.WHITE, this), i, 7);
+            }
+            if (i == 3) {
+                putPiece(new Queen(Color.BLACK, this), i, 0);
+                putPiece(new Queen(Color.WHITE, this), i, 7);
+            }
+            if (i == 4) {
+                putPiece(new King(Color.BLACK, this), i, 0);
+                putPiece(new Queen(Color.WHITE, this), i, 7);
             }
         }
 
-        chessBoard[7][3] = new King(Color.WHITE);
-        chessBoard[0][3] = new King(Color.BLACK);
-        chessBoard[0][4] = new Queen(Color.BLACK);
-        chessBoard[7][4] = new Queen(Color.BLACK);
     }
 
     @Override
     public String toString() {
         StringBuilder sb = new StringBuilder();
         char delimiter = '|';
-        for (int y = BOARD_SIZE - 1; y >= 0; y--) {
+        for (int y = 0; y < BOARD_SIZE; y++) {
             sb.append("  --------------------------------").append(System.lineSeparator());
-            sb.append(y + 1).append(" ").append(delimiter);
+            sb.append(BOARD_SIZE - y).append(" ").append(delimiter);
             for (int x = 0; x < BOARD_SIZE; x++) {
                 Piece currentPiece = getPieceAtCoordinates(x, y);
                 String pieceString = currentPiece == null ? " " : currentPiece.toString();
@@ -73,7 +75,7 @@ public class Board {
         return sb.toString();
     }
 
-    Coordinates findPieceById(Piece piece) {
+    public Coordinates findPieceById(Piece piece) {
         for (int y = 0; y < BOARD_SIZE; y++) {
             for (int x = 0; x < BOARD_SIZE; x++) {
                 if (chessBoard[y][x] == null) {
@@ -84,7 +86,6 @@ public class Board {
                 }
             }
         }
-
         return null;
     }
 
@@ -110,7 +111,6 @@ public class Board {
         }
         Coordinates coords = findPieceById(piece);
         chessBoard[coords.y()][coords.x()] = null;
-        System.out.println(coords.x() + " " + coords.y());
         chessBoard[y][x] = piece;
     }
 
