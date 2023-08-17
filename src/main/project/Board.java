@@ -16,7 +16,7 @@ public class Board {
     public static final int BOARD_SIZE = 8;
     private final Piece[][] chessBoard = new Piece[BOARD_SIZE][BOARD_SIZE];
 
-    public Piece[][] getBoard() {
+    public Piece[][] getChessBoard() {
         return chessBoard;
     }
 
@@ -94,9 +94,6 @@ public class Board {
     }
 
     public Piece putPiece(Piece piece, int x, int y) {
-        if (!validCoordinates(x, y)) {
-            return null;
-        }
         chessBoard[y][x] = piece;
         return piece;
     }
@@ -105,14 +102,13 @@ public class Board {
         movePiece(piece, coords.x(), coords.y());
     }
 
-    // TODO if pawn if movePiece, we have to set firstMove to false and check if enPassant is possible (moved 2 steps)
     public void movePiece(Piece piece, int x, int y) {
         if (!validCoordinates(x, y)) {
             return;
         }
         Coordinates coords = findPieceById(piece);
-        chessBoard[coords.y()][coords.x()] = null;
-        chessBoard[y][x] = piece;
+        putPiece(null, coords.x(), coords.y());
+        putPiece(piece, x, y);
     }
 
     public boolean isEmpty(int x, int y) {
