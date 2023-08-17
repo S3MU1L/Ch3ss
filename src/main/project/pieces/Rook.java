@@ -4,13 +4,14 @@ import src.main.project.Board;
 import src.main.project.Color;
 import src.main.project.Coordinates;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
  * @author Samuel Malec
  */
 public class Rook extends Piece {
-    private boolean castlable = true;
+    private boolean moved = false;
 
     public Rook(Color color, Board board) {
         super(color, board);
@@ -18,13 +19,35 @@ public class Rook extends Piece {
 
     @Override
     public List<Coordinates> getPossibleMoves() {
-        return null;
+        List<Coordinates> result = new ArrayList<>();
+        Coordinates pieceCoords = getBoard().getCoordinatesOfPiece(this);
+        int[] dx = {1, -1, 0, 0};
+        int[] dy = {0, 0, 1, -1};
+
+        for (int i = 0; i < dx.length; i++) {
+            int x = dx[i];
+            int y = dy[i];
+            Coordinates coords = new Coordinates(pieceCoords.x() + x, pieceCoords.y() + y);
+            while (getBoard().validCoordinates(coords)) {
+                Piece piece = getBoard().getPieceAtCoordinates(coords);
+                if (piece == null) {
+                    result.add(coords);
+                } else {
+                    if (piece.getColor().equals(getColor().getOppositeColor())) {
+                        result.add(coords);
+                    }
+                    break;
+                }
+                coords = new Coordinates(coords.x() + x, coords.y() + y);
+            }
+        }
+        return result;
     }
 
     @Override
     public void move(int x, int y) {
         getBoard().movePiece(this, x, y);
-        castlable = false;
+        moved = true;
     }
 
     @Override
@@ -32,8 +55,8 @@ public class Rook extends Piece {
         return getColor().equals(Color.WHITE) ? "\u265C" : "\u2656";
     }
 
-    public boolean isCastlable() {
-        return castlable;
+    public boolean hasMoved() {
+        return moved;
     }
 
 }
