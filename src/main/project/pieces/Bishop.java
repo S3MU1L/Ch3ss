@@ -16,11 +16,16 @@ public class Bishop extends Piece {
 
     @Override
     public String toString() {
-        return getColor().equals(Color.WHITE) ? "\u265D": "\u2657";
+        return getColor().equals(Color.WHITE) ? "\u265D" : "\u2657";
     }
 
     @Override
     public List<Coordinates> getPossibleMoves() {
         return null;
+    }
+
+    @Override
+    public void move(int x, int y) {
+        getBoard().movePiece(this, x, y);
     }
 }

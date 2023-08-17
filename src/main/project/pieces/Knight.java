@@ -21,6 +21,11 @@ public class Knight extends Piece {
     }
 
     @Override
+    public void move(int x, int y) {
+        getBoard().movePiece(this, x, y);
+    }
+
+    @Override
     public String toString() {
         return getColor().equals(Color.WHITE) ? "\u265E" : "\u2658";
     }

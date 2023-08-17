@@ -10,6 +10,8 @@ import java.util.List;
  * @author Samuel Malec
  */
 public class Rook extends Piece {
+    private boolean castlable = true;
+
     public Rook(Color color, Board board) {
         super(color, board);
     }
@@ -20,8 +22,18 @@ public class Rook extends Piece {
     }
 
     @Override
+    public void move(int x, int y) {
+        getBoard().movePiece(this, x, y);
+        castlable = false;
+    }
+
+    @Override
     public String toString() {
         return getColor().equals(Color.WHITE) ? "\u265C" : "\u2656";
+    }
+
+    public boolean isCastlable() {
+        return castlable;
     }
 
 }

@@ -37,5 +37,11 @@ public abstract class Piece {
 
     public abstract List<Coordinates> getPossibleMoves();
 
+    public abstract void move(int x, int y);
+
+    public void move(Coordinates coords) {
+        move(coords.x(), coords.y());
+    }
+
 
 }
