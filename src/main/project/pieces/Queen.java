@@ -5,6 +5,7 @@ import src.main.project.Board;
 import src.main.project.Color;
 import src.main.project.Coordinates;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -18,7 +19,12 @@ public class Queen extends Piece {
 
     @Override
     public List<Coordinates> getPossibleMoves() {
-        return null;
+        Rook rook = new Rook(getColor(), getBoard());
+        Bishop bishop = new Bishop(getColor(), getBoard());
+        List<Coordinates> result = new ArrayList<>();
+        result.addAll(rook.getPossibleMoves());
+        result.addAll(bishop.getPossibleMoves());
+        return result;
     }
 
     @Override
