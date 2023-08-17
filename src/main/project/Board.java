@@ -75,7 +75,7 @@ public class Board {
         return sb.toString();
     }
 
-    public Coordinates findPieceById(Piece piece) {
+    public Coordinates getCoordinatesOfPiece(Piece piece) {
         for (int y = 0; y < BOARD_SIZE; y++) {
             for (int x = 0; x < BOARD_SIZE; x++) {
                 if (chessBoard[y][x] == null) {
@@ -106,7 +106,7 @@ public class Board {
         if (!validCoordinates(x, y)) {
             return;
         }
-        Coordinates coords = findPieceById(piece);
+        Coordinates coords = getCoordinatesOfPiece(piece);
         putPiece(null, coords.x(), coords.y());
         putPiece(piece, x, y);
     }
@@ -135,6 +135,17 @@ public class Board {
             return null;
         }
         return chessBoard[y][x];
+    }
+
+    public Piece getKingOfColor(Color color) {
+        for (int y = 0; y < BOARD_SIZE; y++) {
+            for (int x = 0; x < BOARD_SIZE; x++) {
+                if (chessBoard[y][x] instanceof King && chessBoard[y][x].getColor().equals(color)) {
+                    return chessBoard[y][x];
+                }
+            }
+        }
+        return null;
     }
 
     public Piece getPieceAtCoordinates(Coordinates coords) {
