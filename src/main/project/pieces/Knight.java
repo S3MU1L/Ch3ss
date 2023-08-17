@@ -52,6 +52,6 @@ public class Knight extends Piece {
 
     @Override
     public String toString() {
-        return getColor().equals(Color.WHITE) ? "\u265E" : "\u2658";
+        return getColor().equals(Color.WHITE) ? "♞" : "♘";
     }
 }

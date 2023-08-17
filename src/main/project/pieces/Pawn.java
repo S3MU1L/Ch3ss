@@ -63,7 +63,7 @@ public class Pawn extends Piece {
 
     @Override
     public String toString() {
-        return getColor().equals(Color.WHITE) ? "\u265F" : "\u2659";
+        return getColor().equals(Color.WHITE) ? "♟" : "♙";
     }
 
     public boolean isFirstMove() {

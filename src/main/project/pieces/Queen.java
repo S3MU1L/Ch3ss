@@ -41,6 +41,6 @@ public class Queen extends Piece {
 
     @Override
     public String toString() {
-        return getColor().equals(Color.WHITE) ? "\u265B" : "\u2655";
+        return getColor().equals(Color.WHITE) ? "♛" : "♕";
     }
 }

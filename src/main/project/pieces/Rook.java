@@ -52,7 +52,7 @@ public class Rook extends Piece {
 
     @Override
     public String toString() {
-        return getColor().equals(Color.WHITE) ? "\u265C" : "\u2656";
+        return getColor().equals(Color.WHITE) ? "♜" : "♖";
     }
 
     public boolean hasMoved() {

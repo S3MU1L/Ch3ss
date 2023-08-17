@@ -1,5 +1,6 @@
 package src.main.project;
 
+import src.main.project.pieces.King;
 import src.main.project.pieces.Piece;
 
 import java.util.List;
@@ -9,10 +10,10 @@ import java.util.Scanner;
  * @author Samuel Malec
  */
 public class Game {
-    private Board board = new Board();
-    private Scanner scanner = new Scanner(System.in);
-    private Player playerOne = new Player(Color.WHITE);
-    private Player playerTwo = new Player(Color.BLACK);
+    private final Board board = new Board();
+    private final Scanner scanner = new Scanner(System.in);
+    private final Player playerOne = new Player(Color.WHITE);
+    private final Player playerTwo = new Player(Color.BLACK);
 
     public void play() {
         board.initializeBoard();
@@ -41,7 +42,13 @@ public class Game {
                 System.out.println(move);
             }
 
-            if (!possibleMoves.contains(to)) {
+            if (piece instanceof King) {
+                List<Coordinates> castleMoves = ((King) piece).getCastleMoves();
+                if (!castleMoves.contains(to) && !possibleMoves.contains(to)) {
+                    System.out.println("Invalid second coordinate");
+                    continue;
+                }
+            } else if (!possibleMoves.contains(to)) {
                 System.out.println("Invalid second coordinate");
                 continue;
             }
