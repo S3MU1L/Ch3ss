@@ -11,7 +11,7 @@ import java.util.List;
  * @author Samuel Malec
  */
 public class Pawn extends Piece {
-    private final boolean firstMove = true;
+    private boolean firstMove = true;
     private boolean enPassantPossible = false;
 
     public Pawn(Color color, Board board) {
@@ -65,11 +65,36 @@ public class Pawn extends Piece {
         return firstMove;
     }
 
+    public void setFirstMove(boolean b) {
+        firstMove = b;
+    }
+
     public boolean isEnPassantPossible() {
         return enPassantPossible;
     }
 
     public void setEnPassantPossible(boolean enPassantPossible) {
         this.enPassantPossible = enPassantPossible;
+    }
+
+    public void move(int x, int y) {
+        Board board = getBoard();
+        if (!board.validCoordinates(x, y)) {
+            return;
+        }
+
+        Coordinates coords = board.findPieceById(this);
+        // check enPassant
+        int increment = getColor().equals(Color.WHITE) ? 1 : -1;
+        if (!firstMove && board.isEmpty(x, y) && (Math.abs(x - coords.x()) + Math.abs(y - coords.y()) == 2)) {
+            board.getChessBoard()[y + increment][x] = null;
+        }
+
+        board.getChessBoard()[coords.y()][coords.x()] = null;
+        board.getChessBoard()[y][x] = this;
+        setFirstMove(false);
+        if (Math.abs(coords.y() - y) == 2) {
+            setEnPassantPossible(true);
+        }
     }
 }
