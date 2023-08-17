@@ -4,6 +4,7 @@ import src.main.project.Board;
 import src.main.project.Color;
 import src.main.project.Coordinates;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -17,7 +18,32 @@ public class Knight extends Piece {
 
     @Override
     public List<Coordinates> getPossibleMoves() {
-        return null;
+        List<Coordinates> result = new ArrayList<>();
+        Coordinates current = getBoard().getCoordinatesOfPiece(this);
+        int[] dxValues = {1, -1, 2, -2};
+        int[] dyValues = {1, -1, 2, -2};
+
+        for (int dx : dxValues) {
+            for (int dy : dyValues) {
+                if (Math.abs(dx) == Math.abs(dy)) {
+                    continue;
+                }
+
+                Coordinates tempCoords = new Coordinates(current.x() + dx, current.y() + dy);
+
+                if (!getBoard().validCoordinates(tempCoords)) {
+                    continue;
+                }
+
+                Piece piece = getBoard().getPieceAtCoordinates(tempCoords);
+                if (piece != null && piece.getColor().equals(getColor())) {
+                    continue;
+                }
+
+                result.add(tempCoords);
+            }
+        }
+        return result;
     }
 
     @Override
