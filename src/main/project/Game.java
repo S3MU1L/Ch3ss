@@ -18,8 +18,6 @@ public class Game {
         board.initializeBoard();
         Player currentPlayer = playerOne;
         System.out.println(board);
-        System.out.println("Write coordinates in the format: <from> <to>, eg. e4 e5");
-
         while (true) {
             System.out.println("Current player: " + currentPlayer.getColor());
             String input = scanner.nextLine();
@@ -32,9 +30,8 @@ public class Game {
             Coordinates from = Notation.coordsFromNotation(data[0]);
             Coordinates to = Notation.coordsFromNotation(data[1]);
             Piece piece = board.getPieceAtCoordinates(from);
-            List<Coordinates> possibleMoves = piece.getPossibleMoves();
+            List<Coordinates> possibleMoves = board.getOnlySafeMoves(piece);
 
-//            System.out.println("Possible moves: ");
             if (!piece.getColor().equals(currentPlayer.getColor())) {
                 System.out.println("Invalid piece, please select piece that has the color: " + currentPlayer.getColor());
                 continue;
@@ -49,7 +46,7 @@ public class Game {
                 continue;
             }
 
-            board.movePiece(piece, to);
+            piece.move(to);
             currentPlayer = currentPlayer.equals(playerOne) ? playerTwo : playerOne;
             System.out.println(board);
         }

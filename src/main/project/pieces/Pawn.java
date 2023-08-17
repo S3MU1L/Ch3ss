@@ -20,8 +20,8 @@ public class Pawn extends Piece {
 
     @Override
     public List<Coordinates> getPossibleMoves() {
-        List<Coordinates> result = new ArrayList<>();
-        Coordinates pieceCoords = getBoard().findPieceById(this);
+        List<Coordinates> allMoves = new ArrayList<>();
+        Coordinates pieceCoords = getBoard().getCoordinatesOfPiece(this);
         int increment = getColor() == Color.WHITE ? -1 : 1;
         int x = pieceCoords.x();
         int y = pieceCoords.y();
@@ -37,23 +37,28 @@ public class Pawn extends Piece {
             if (!getBoard().isEmpty(x, y + i * increment)) {
                 continue;
             }
-            result.add(new Coordinates(x, y + i * increment));
+            allMoves.add(new Coordinates(x, y + i * increment));
         }
 
         // taking a piece diagonally
         for (int i : new int[]{1, -1}) {
-            if (getBoard().validCoordinates(x + i, y + increment) && !getBoard().isEmpty(x + i, y + increment)) {
-                result.add(new Coordinates(x + i, y + increment));
+            if (!getBoard().validCoordinates(x + i, y + increment)) {
+                continue;
+            }
+
+            Piece piece = getBoard().getPieceAtCoordinates(x + i, y + increment);
+            if (piece != null && piece.getColor().equals(getColor().getOppositeColor())) {
+                allMoves.add(new Coordinates(x + i, y + increment));
             }
 
             Piece neighbour = getBoard().getPieceAtCoordinates(x + i, y);
             if (neighbour != null && neighbour.getColor().equals(getColor().getOppositeColor()) && neighbour instanceof Pawn) {
                 if (((Pawn) neighbour).isEnPassantPossible()) {
-                    result.add(new Coordinates(x + i, y + increment));
+                    allMoves.add(new Coordinates(x + i, y + increment));
                 }
             }
         }
-        return result;
+        return allMoves;
     }
 
     @Override
@@ -83,15 +88,15 @@ public class Pawn extends Piece {
             return;
         }
 
-        Coordinates coords = board.findPieceById(this);
-        // check enPassant
+        Coordinates coords = board.getCoordinatesOfPiece(this);
+        // checking enPassant
         int increment = getColor().equals(Color.WHITE) ? 1 : -1;
         if (!firstMove && board.isEmpty(x, y) && (Math.abs(x - coords.x()) + Math.abs(y - coords.y()) == 2)) {
-            board.getChessBoard()[y + increment][x] = null;
+            board.putPiece(null, x, y + increment);
         }
 
-        board.getChessBoard()[coords.y()][coords.x()] = null;
-        board.getChessBoard()[y][x] = this;
+        board.putPiece(null, coords.x(), coords.y());
+        board.putPiece(this, x, y);
         setFirstMove(false);
         if (Math.abs(coords.y() - y) == 2) {
             setEnPassantPossible(true);

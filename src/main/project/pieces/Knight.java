@@ -18,7 +18,7 @@ public class Knight extends Piece {
 
     @Override
     public List<Coordinates> getPossibleMoves() {
-        List<Coordinates> result = new ArrayList<>();
+        List<Coordinates> allMoves = new ArrayList<>();
         Coordinates current = getBoard().getCoordinatesOfPiece(this);
         int[] dxValues = {1, -1, 2, -2};
         int[] dyValues = {1, -1, 2, -2};
@@ -30,7 +30,6 @@ public class Knight extends Piece {
                 }
 
                 Coordinates tempCoords = new Coordinates(current.x() + dx, current.y() + dy);
-
                 if (!getBoard().validCoordinates(tempCoords)) {
                     continue;
                 }
@@ -40,10 +39,10 @@ public class Knight extends Piece {
                     continue;
                 }
 
-                result.add(tempCoords);
+                allMoves.add(tempCoords);
             }
         }
-        return result;
+        return allMoves;
     }
 
     @Override

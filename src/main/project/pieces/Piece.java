@@ -43,5 +43,4 @@ public abstract class Piece {
         move(coords.x(), coords.y());
     }
 
-
 }

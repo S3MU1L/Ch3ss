@@ -22,29 +22,27 @@ public class Bishop extends Piece {
 
     @Override
     public List<Coordinates> getPossibleMoves() {
-        List<Coordinates> result = new ArrayList<>();
+        List<Coordinates> allPossible = new ArrayList<>();
         Coordinates pieceCoords = getBoard().getCoordinatesOfPiece(this);
-
         for (int dx : new int[]{1, -1}) {
             for (int dy : new int[]{1, -1}) {
                 Coordinates coords = new Coordinates(pieceCoords.x() + dx, pieceCoords.y() + dy);
-
                 while (getBoard().validCoordinates(coords)) {
                     Piece piece = getBoard().getPieceAtCoordinates(coords);
                     if (piece == null) {
-                        result.add(coords);
+                        allPossible.add(coords);
                     } else {
                         if (piece.getColor().equals(getColor().getOppositeColor())) {
-                            result.add(coords);
+                            allPossible.add(coords);
                         }
                         break;
                     }
                     coords = new Coordinates(coords.x() + dx, coords.y() + dy);
                 }
-
             }
         }
-        return result;
+
+        return allPossible;
     }
 
     @Override

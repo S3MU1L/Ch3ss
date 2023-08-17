@@ -8,6 +8,11 @@ import src.main.project.pieces.Piece;
 import src.main.project.pieces.Queen;
 import src.main.project.pieces.Rook;
 
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
+
 
 /**
  * @author Samuel Malec
@@ -45,7 +50,7 @@ public class Board {
             }
             if (i == 4) {
                 putPiece(new King(Color.BLACK, this), i, 0);
-                putPiece(new Queen(Color.WHITE, this), i, 7);
+                putPiece(new King(Color.WHITE, this), i, 7);
             }
         }
 
@@ -137,11 +142,11 @@ public class Board {
         return chessBoard[y][x];
     }
 
-    public Piece getKingOfColor(Color color) {
+    public King getKingOfColor(Color color) {
         for (int y = 0; y < BOARD_SIZE; y++) {
             for (int x = 0; x < BOARD_SIZE; x++) {
                 if (chessBoard[y][x] instanceof King && chessBoard[y][x].getColor().equals(color)) {
-                    return chessBoard[y][x];
+                    return (King) chessBoard[y][x];
                 }
             }
         }
@@ -150,6 +155,53 @@ public class Board {
 
     public Piece getPieceAtCoordinates(Coordinates coords) {
         return getPieceAtCoordinates(coords.x(), coords.y());
+    }
+
+    public List<Piece> getPiecesOfColor(Color color) {
+        List<Piece> result = new ArrayList<>();
+        for (int y = 0; y < BOARD_SIZE; y++) {
+            for (int x = 0; x < BOARD_SIZE; x++) {
+                if (chessBoard[y][x] == null) {
+                    continue;
+                }
+                if (chessBoard[y][x].getColor().equals(color)) {
+                    result.add(chessBoard[y][x]);
+                }
+            }
+        }
+        return result;
+    }
+
+    public Set<Coordinates> getAllAttackedCoords(List<Piece> pieces) {
+        Set<Coordinates> result = new HashSet<>();
+        for (Piece piece : pieces) {
+            result.addAll(piece.getPossibleMoves());
+        }
+        return result;
+    }
+
+
+    public List<Coordinates> getOnlySafeMoves(Piece piece) {
+        List<Coordinates> allPossibleMoves = piece.getPossibleMoves();
+        List<Coordinates> result = new ArrayList<>();
+
+        if (allPossibleMoves.size() == 0) {
+            return result;
+        }
+
+        Coordinates originalPieceCoords = getCoordinatesOfPiece(piece);
+
+        for (Coordinates coord : allPossibleMoves) {
+            Piece pieceAtCoordinate = getPieceAtCoordinates(coord);
+            putPiece(null, originalPieceCoords);
+            putPiece(piece, coord);
+            if (!getKingOfColor(piece.getColor()).isInCheck()) {
+                result.add(coord);
+            }
+            putPiece(pieceAtCoordinate, coord);
+            putPiece(piece, originalPieceCoords);
+        }
+        return result;
     }
 
 }

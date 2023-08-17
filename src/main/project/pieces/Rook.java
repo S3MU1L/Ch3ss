@@ -19,7 +19,7 @@ public class Rook extends Piece {
 
     @Override
     public List<Coordinates> getPossibleMoves() {
-        List<Coordinates> result = new ArrayList<>();
+        List<Coordinates> allMoves = new ArrayList<>();
         Coordinates pieceCoords = getBoard().getCoordinatesOfPiece(this);
         int[] dx = {1, -1, 0, 0};
         int[] dy = {0, 0, 1, -1};
@@ -31,17 +31,17 @@ public class Rook extends Piece {
             while (getBoard().validCoordinates(coords)) {
                 Piece piece = getBoard().getPieceAtCoordinates(coords);
                 if (piece == null) {
-                    result.add(coords);
+                    allMoves.add(coords);
                 } else {
                     if (piece.getColor().equals(getColor().getOppositeColor())) {
-                        result.add(coords);
+                        allMoves.add(coords);
                     }
                     break;
                 }
                 coords = new Coordinates(coords.x() + x, coords.y() + y);
             }
         }
-        return result;
+        return allMoves;
     }
 
     @Override
