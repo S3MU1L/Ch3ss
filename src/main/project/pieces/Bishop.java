@@ -4,6 +4,7 @@ import src.main.project.Board;
 import src.main.project.Color;
 import src.main.project.Coordinates;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -21,7 +22,29 @@ public class Bishop extends Piece {
 
     @Override
     public List<Coordinates> getPossibleMoves() {
-        return null;
+        List<Coordinates> result = new ArrayList<>();
+        Coordinates pieceCoords = getBoard().getCoordinatesOfPiece(this);
+
+        for (int dx : new int[]{1, -1}) {
+            for (int dy : new int[]{1, -1}) {
+                Coordinates coords = new Coordinates(pieceCoords.x() + dx, pieceCoords.y() + dy);
+
+                while (getBoard().validCoordinates(coords)) {
+                    Piece piece = getBoard().getPieceAtCoordinates(coords);
+                    if (piece == null) {
+                        result.add(coords);
+                    } else {
+                        if (piece.getColor().equals(getColor().getOppositeColor())) {
+                            result.add(coords);
+                        }
+                        break;
+                    }
+                    coords = new Coordinates(coords.x() + dx, coords.y() + dy);
+                }
+
+            }
+        }
+        return result;
     }
 
     @Override
