@@ -5,6 +5,7 @@ import src.main.project.Board;
 import src.main.project.Color;
 import src.main.project.Coordinates;
 
+import javax.swing.*;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicLong;
 
@@ -38,6 +39,8 @@ public abstract class Piece {
     public abstract List<Coordinates> getPossibleMoves();
 
     public abstract void move(int x, int y);
+
+    public abstract ImageIcon getImageIcon();
 
     public void move(Coordinates coords) {
         move(coords.x(), coords.y());

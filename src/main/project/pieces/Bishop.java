@@ -4,6 +4,7 @@ import src.main.project.Board;
 import src.main.project.Color;
 import src.main.project.Coordinates;
 
+import javax.swing.*;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -47,5 +48,11 @@ public class Bishop extends Piece {
     @Override
     public void move(int x, int y) {
         getBoard().movePiece(this, x, y);
+    }
+
+    @Override
+    public ImageIcon getImageIcon() {
+        String path = getColor().equals(Color.WHITE) ? "img/bishopW.png" : "img/bishopB.png";
+        return new ImageIcon(path);
     }
 }

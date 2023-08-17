@@ -4,6 +4,7 @@ import src.main.project.Board;
 import src.main.project.Color;
 import src.main.project.Coordinates;
 
+import javax.swing.*;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -101,5 +102,11 @@ public class Pawn extends Piece {
         if (Math.abs(coords.y() - y) == 2) {
             setEnPassantPossible(true);
         }
+    }
+
+    @Override
+    public ImageIcon getImageIcon() {
+        String path = getColor().equals(Color.WHITE) ? "img/pawnW.png" : "img/pawnB.png";
+        return new ImageIcon(path);
     }
 }

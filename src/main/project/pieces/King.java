@@ -4,6 +4,7 @@ import src.main.project.Board;
 import src.main.project.Color;
 import src.main.project.Coordinates;
 
+import javax.swing.*;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
@@ -129,6 +130,12 @@ public class King extends Piece {
         }
         getBoard().movePiece(this, x, y);
         hasMoved = true;
+    }
+
+    @Override
+    public ImageIcon getImageIcon() {
+        String path = getColor().equals(Color.WHITE) ? "img/kingW.png" : "img/kingB.png";
+        return new ImageIcon(path);
     }
 
     @Override

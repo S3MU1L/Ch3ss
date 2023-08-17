@@ -4,6 +4,7 @@ import src.main.project.Board;
 import src.main.project.Color;
 import src.main.project.Coordinates;
 
+import javax.swing.*;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -48,6 +49,12 @@ public class Rook extends Piece {
     public void move(int x, int y) {
         getBoard().movePiece(this, x, y);
         moved = true;
+    }
+
+    @Override
+    public ImageIcon getImageIcon() {
+        String path = getColor().equals(Color.WHITE) ? "img/rookW.png" : "img/rookB.png";
+        return new ImageIcon(path);
     }
 
     @Override
