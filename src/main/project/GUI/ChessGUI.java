@@ -3,7 +3,12 @@ package src.main.project.GUI;
 import src.main.project.Board;
 import src.main.project.Coordinates;
 import src.main.project.GameState;
+import src.main.project.pieces.Bishop;
+import src.main.project.pieces.Knight;
+import src.main.project.pieces.Pawn;
 import src.main.project.pieces.Piece;
+import src.main.project.pieces.Queen;
+import src.main.project.pieces.Rook;
 
 import javax.swing.*;
 import java.awt.*;
@@ -22,8 +27,8 @@ public class ChessGUI {
     public static final int RADIUS = 15;
     private JFrame frame;
     private JPanel chessPanel;
-    private GameState state;
     private List<Coordinates> possibleMoves = null;
+    private GameState state;
     private Board board;
     private Coordinates firstClick = null;
 
@@ -31,7 +36,7 @@ public class ChessGUI {
         this.board = board;
         frame = new JFrame("Chess");
         frame.setLocationRelativeTo(null);
-        frame.setSize(BOARD_SIZE * SQUARE_SIZE, BOARD_SIZE * SQUARE_SIZE);
+        frame.setSize(700, 700);
         chessPanel = new JPanel(new GridLayout(BOARD_SIZE, BOARD_SIZE));
         frame.add(chessPanel);
         frame.setResizable(false);
@@ -79,17 +84,26 @@ public class ChessGUI {
                 }
 
                 Piece currPiece = board.getPieceAtCoordinates(x, y);
+                if (currPiece instanceof Pawn && (currPiece.getColor() == src.main.project.Color.WHITE && y == 0
+                        || currPiece.getColor() == src.main.project.Color.BLACK && y == 7)) {
+                    currPiece = showPawnPromotionDialog(x, y);
+                    board.putPiece(currPiece, x, y);
+                }
+
                 if (currPiece != null) {
                     ImageIcon pieceIcon = currPiece.getImageIcon();
                     JLabel pieceLabel = new JLabel(pieceIcon);
                     squarePanel.add(pieceLabel);
                 }
+
                 chessPanel.add(squarePanel);
             }
         }
         chessPanel.revalidate();
         chessPanel.repaint();
+        frame.pack();
     }
+
 
     public List<Coordinates> getPossibleMoves() {
         return possibleMoves;
@@ -114,22 +128,50 @@ public class ChessGUI {
     public void setState() {
         this.state = GameState.gameState(board);
         GameState state = GameState.gameState(board);
-        if (state.equals(GameState.CHECK)) {
-            System.out.println("Check");
-        } else if (state.equals(GameState.WHITE)) {
-            System.out.println("White has won");
-            frame.disable();
-        } else if (state.equals(GameState.BLACK)) {
-            System.out.println("Black has won");
-            frame.disable();
-        } else if (state.equals(GameState.DRAW)) {
-            System.out.println("Draw");
-            frame.disable();
-        } else {
-            System.out.println("Playing");
-        }
+//        if (state.equals(GameState.CHECK)) {
+//            System.out.println("Check");
+//        } else if (state.equals(GameState.WHITE)) {
+//            System.out.println("White has won");
+//            frame.disable();
+//        } else if (state.equals(GameState.BLACK)) {
+//            System.out.println("Black has won");
+//            frame.disable();
+//        } else if (state.equals(GameState.DRAW)) {
+//            System.out.println("Draw");
+//            frame.disable();
+//        } else {
+//            System.out.println("Playing");
+//        }
 
 
     }
 
+    private Piece showPawnPromotionDialog(int x, int y) {
+        Object[] options = {"Queen", "Rook", "Bishop", "Knight"};
+        int choice = JOptionPane.showOptionDialog(frame,
+                "Select a piece to promote your pawn:",
+                "Pawn Promotion",
+                JOptionPane.YES_NO_CANCEL_OPTION,
+                JOptionPane.QUESTION_MESSAGE,
+                null,
+                options,
+                options[0]);
+
+        Piece newPiece = null;
+        switch (choice) {
+            case 0:
+                newPiece = new Queen(board.getCurrentColor().getOppositeColor(), board);
+                break;
+            case 1:
+                newPiece = new Rook(board.getCurrentColor().getOppositeColor(), board);
+                break;
+            case 2:
+                newPiece = new Bishop(board.getCurrentColor().getOppositeColor(), board);
+                break;
+            case 3:
+                newPiece = new Knight(board.getCurrentColor().getOppositeColor(), board);
+                break;
+        }
+        return newPiece;
+    }
 }

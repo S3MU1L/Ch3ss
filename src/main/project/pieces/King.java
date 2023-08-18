@@ -55,7 +55,11 @@ public class King extends Piece {
     }
 
     public List<Coordinates> getCastleMoves() {
+
         List<Coordinates> result = new ArrayList<>();
+        if (hasMoved) {
+            return result;
+        }
         Coordinates coords = getBoard().getCoordinatesOfPiece(this);
         Set<Coordinates> attackedSquares = getBoard().getAllAttackedCoords(getBoard().getPiecesOfColor(getColor().getOppositeColor()));
         if (canCastleKingSide(coords, attackedSquares)) {

@@ -3,7 +3,6 @@ package src.main.project;
 import src.main.project.pieces.King;
 import src.main.project.pieces.Piece;
 
-import java.util.List;
 import java.util.Set;
 
 /**

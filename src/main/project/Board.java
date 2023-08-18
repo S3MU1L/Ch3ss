@@ -23,10 +23,6 @@ public class Board {
 
     private Color currentColor = Color.WHITE;
 
-    public Piece[][] getChessBoard() {
-        return chessBoard;
-    }
-
     public Color getCurrentColor() {
         return currentColor;
     }
