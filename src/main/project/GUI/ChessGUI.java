@@ -2,6 +2,7 @@ package src.main.project.GUI;
 
 import src.main.project.Board;
 import src.main.project.Coordinates;
+import src.main.project.GameState;
 import src.main.project.pieces.Piece;
 
 import javax.swing.*;
@@ -14,14 +15,17 @@ import java.util.List;
 public class ChessGUI {
     public static final int BOARD_SIZE = 8;
     public static final int SQUARE_SIZE = 80;
-    public static final Color WHITE_COLOR = new Color(228, 230, 237);
-    public static final Color BLACK_COLOR = new Color(99, 166, 107);
+    public static final Color WHITE_COLOR = new Color(238, 238, 210);
+    public static final Color BLACK_COLOR = new Color(118, 150, 86);
     public static final Color ATTACKED_COLOR = new Color(232, 106, 81);
+    public static final Color HIGHLIGHTED_COLOR = new Color(186, 202, 68);
     public static final int RADIUS = 15;
     private JFrame frame;
     private JPanel chessPanel;
-    private List<Coordinates> attackedCoordinates = null;
+    private GameState state;
+    private List<Coordinates> possibleMoves = null;
     private Board board;
+    private Coordinates firstClick = null;
 
     public ChessGUI(Board board) {
         this.board = board;
@@ -49,7 +53,11 @@ public class ChessGUI {
                     squarePanel.setBackground(BLACK_COLOR);
                 }
 
-                if (getAttackedCoordinates() != null && getAttackedCoordinates().contains(new Coordinates(x, y))) {
+                if (getFirstClick() != null && y == getFirstClick().y() && x == getFirstClick().x()) {
+                    squarePanel.setBackground(HIGHLIGHTED_COLOR);
+                }
+
+                if (getPossibleMoves() != null && getPossibleMoves().contains(new Coordinates(x, y))) {
                     if (!board.isEmpty(x, y)) {
                         squarePanel.setBackground(ATTACKED_COLOR);
                     } else {
@@ -83,15 +91,45 @@ public class ChessGUI {
         chessPanel.repaint();
     }
 
-    public List<Coordinates> getAttackedCoordinates() {
-        return attackedCoordinates;
+    public List<Coordinates> getPossibleMoves() {
+        return possibleMoves;
     }
 
-    public void setAttackedCoordinates(List<Coordinates> attackedCoordinates) {
-        this.attackedCoordinates = attackedCoordinates;
+    public void setPossibleMoves(List<Coordinates> possibleMoves) {
+        this.possibleMoves = possibleMoves;
     }
 
     public Board getBoard() {
         return board;
     }
+
+    public Coordinates getFirstClick() {
+        return firstClick;
+    }
+
+    public void setFirstClick(Coordinates firstClick) {
+        this.firstClick = firstClick;
+    }
+
+    public void setState() {
+        this.state = GameState.gameState(board);
+        GameState state = GameState.gameState(board);
+        if (state.equals(GameState.CHECK)) {
+            System.out.println("Check");
+        } else if (state.equals(GameState.WHITE)) {
+            System.out.println("White has won");
+            frame.disable();
+        } else if (state.equals(GameState.BLACK)) {
+            System.out.println("Black has won");
+            frame.disable();
+        } else if (state.equals(GameState.DRAW)) {
+            System.out.println("Draw");
+            frame.disable();
+        } else {
+            System.out.println("Playing");
+        }
+
+
+    }
+
 }

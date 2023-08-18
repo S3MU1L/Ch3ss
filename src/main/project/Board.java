@@ -190,8 +190,17 @@ public class Board {
         return result;
     }
 
+    public Set<Coordinates> getPossibleMovesOfColor(Color color) {
+        List<Piece> pieces = getPiecesOfColor(color);
+        Set<Coordinates> result = new HashSet<>();
+        for (var piece : pieces) {
+            result.addAll(getSafeMovesOfPiece(piece));
+        }
+        return result;
+    }
 
-    public List<Coordinates> getOnlySafeMoves(Piece piece) {
+
+    public List<Coordinates> getSafeMovesOfPiece(Piece piece) {
         List<Coordinates> allPossibleMoves = piece.getPossibleMoves();
         List<Coordinates> result = new ArrayList<>();
 
