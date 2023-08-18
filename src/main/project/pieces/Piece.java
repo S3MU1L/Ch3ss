@@ -44,6 +44,15 @@ public abstract class Piece {
 
     public void move(Coordinates coords) {
         move(coords.x(), coords.y());
+        board.changeCurrentColor();
+
+        List<Piece> pieces = board.getPiecesOfColor(board.getCurrentColor());
+        for (Piece piece : pieces) {
+            if (piece instanceof Pawn) {
+                ((Pawn) piece).setEnPassantPossible(false);
+            }
+        }
+
     }
 
 }

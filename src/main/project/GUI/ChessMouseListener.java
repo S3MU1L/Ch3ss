@@ -2,24 +2,25 @@ package src.main.project.GUI;
 
 import src.main.project.Board;
 import src.main.project.Coordinates;
+import src.main.project.pieces.King;
+import src.main.project.pieces.Pawn;
 import src.main.project.pieces.Piece;
 
-import java.util.List;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * @author Samuel Malec
  */
 public class ChessMouseListener implements MouseListener {
     private ChessGUI gui;
-    private Board board;
     private Piece piece;
     private boolean firstClick = true;
 
-    public ChessMouseListener(ChessGUI gui, Board board) {
+    public ChessMouseListener(ChessGUI gui) {
         this.gui = gui;
-        this.board = board;
     }
 
     @Override
@@ -38,33 +39,33 @@ public class ChessMouseListener implements MouseListener {
     public void mousePressed(MouseEvent e) {
         int x = getColumn(e.getX());
         int y = getRow(e.getY());
-        Piece currPiece = board.getPieceAtCoordinates(x, y);
+        Piece currPiece = gui.getBoard().getPieceAtCoordinates(x, y);
 
-        if (firstClick && (currPiece == null || !currPiece.getColor().equals(board.getCurrentColor()))) {
+        if (firstClick && (currPiece == null || !currPiece.getColor().equals(gui.getBoard().getCurrentColor()))) {
             gui.setAttackedCoordinates(null);
-            gui.drawBoard();
-            return;
-        }
-
-        if (currPiece != null && currPiece.getColor().equals(board.getCurrentColor())) {
+        } else if (currPiece != null && currPiece.getColor().equals(gui.getBoard().getCurrentColor())) {
             firstClick = false;
             piece = currPiece;
-            gui.setAttackedCoordinates(currPiece.getPossibleMoves());
-            gui.drawBoard();
-            return;
-        }
-
-        if (!firstClick) {
+            List<Coordinates> safeMoves = gui.getBoard().getOnlySafeMoves(piece);
+            if (piece instanceof King) {
+                List<Coordinates> castleCoords = ((King) piece).getCastleMoves();
+                safeMoves.addAll(castleCoords);
+            }
+            gui.setAttackedCoordinates(safeMoves);
+        } else if (!firstClick) {
             Coordinates coords = new Coordinates(x, y);
-            if (gui.getAttackedCoordinates().contains(coords)) {
-                board.movePiece(piece, coords);
-                board.changeCurrentColor();
+            if (piece instanceof King) {
+                List<Coordinates> castleMoves = ((King) piece).getCastleMoves();
+                if (castleMoves.contains(coords) || gui.getAttackedCoordinates().contains(coords)) {
+                    piece.move(coords);
+                }
+            } else if (gui.getAttackedCoordinates().contains(coords)) {
+                piece.move(coords);
             }
             gui.setAttackedCoordinates(null);
-            gui.drawBoard();
             firstClick = true;
         }
-
+        gui.drawBoard();
     }
 
     @Override

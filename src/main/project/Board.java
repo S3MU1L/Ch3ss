@@ -21,8 +21,18 @@ public class Board {
     public static final int BOARD_SIZE = 8;
     private final Piece[][] chessBoard = new Piece[BOARD_SIZE][BOARD_SIZE];
 
+    private Color currentColor = Color.WHITE;
+
     public Piece[][] getChessBoard() {
         return chessBoard;
+    }
+
+    public Color getCurrentColor() {
+        return currentColor;
+    }
+
+    public void changeCurrentColor() {
+        currentColor = currentColor.equals(Color.WHITE) ? Color.BLACK : Color.WHITE;
     }
 
     public void initializeBoard() {

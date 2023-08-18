@@ -33,7 +33,7 @@ public class ChessGUI {
         frame.setResizable(false);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setVisible(true);
-        chessPanel.addMouseListener(new ChessMouseListener(this, board));
+        chessPanel.addMouseListener(new ChessMouseListener(this));
         drawBoard();
     }
 
@@ -89,5 +89,9 @@ public class ChessGUI {
 
     public void setAttackedCoordinates(List<Coordinates> attackedCoordinates) {
         this.attackedCoordinates = attackedCoordinates;
+    }
+
+    public Board getBoard() {
+        return board;
     }
 }

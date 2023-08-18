@@ -29,14 +29,14 @@ public class Pawn extends Piece {
 
         // moving forward
         for (int i : new int[]{1, 2}) {
-            if (!firstMove && i == 2) {
-                continue;
+            if (!firstMove && i != 1) {
+                break;
             }
             if (!getBoard().validCoordinates(x, y + i * increment)) {
-                continue;
+                break;
             }
             if (!getBoard().isEmpty(x, y + i * increment)) {
-                continue;
+                break;
             }
             allMoves.add(new Coordinates(x, y + i * increment));
         }
@@ -48,14 +48,15 @@ public class Pawn extends Piece {
             }
 
             Piece piece = getBoard().getPieceAtCoordinates(x + i, y + increment);
+            Coordinates tempCoords = new Coordinates(x + i, y + increment);
             if (piece != null && piece.getColor().equals(getColor().getOppositeColor())) {
-                allMoves.add(new Coordinates(x + i, y + increment));
+                allMoves.add(tempCoords);
             }
 
             Piece neighbour = getBoard().getPieceAtCoordinates(x + i, y);
             if (neighbour != null && neighbour.getColor().equals(getColor().getOppositeColor()) && neighbour instanceof Pawn) {
                 if (((Pawn) neighbour).isEnPassantPossible()) {
-                    allMoves.add(new Coordinates(x + i, y + increment));
+                    allMoves.add(tempCoords);
                 }
             }
         }
@@ -69,10 +70,6 @@ public class Pawn extends Piece {
 
     public boolean isFirstMove() {
         return firstMove;
-    }
-
-    public void setFirstMove(boolean b) {
-        firstMove = b;
     }
 
     public boolean isEnPassantPossible() {
@@ -98,10 +95,12 @@ public class Pawn extends Piece {
 
         board.putPiece(null, coords.x(), coords.y());
         board.putPiece(this, x, y);
-        setFirstMove(false);
-        if (Math.abs(coords.y() - y) == 2) {
-            setEnPassantPossible(true);
+        if (firstMove && Math.abs(coords.y() - y) == 2) {
+            enPassantPossible = true;
+        } else {
+            enPassantPossible = false;
         }
+        firstMove = false;
     }
 
     @Override
