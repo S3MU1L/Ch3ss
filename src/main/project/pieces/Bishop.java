@@ -5,6 +5,7 @@ import src.main.project.Color;
 import src.main.project.Coordinates;
 
 import javax.swing.*;
+import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -52,7 +53,7 @@ public class Bishop extends Piece {
 
     @Override
     public ImageIcon getImageIcon() {
-        String path = getColor().equals(Color.WHITE) ? "img/bishopW.png" : "img/bishopB.png";
+        String path = IMG_FOLDER + File.separator + (getColor().equals(Color.WHITE) ? "bishopW.png" : "bishopB.png");
         return new ImageIcon(path);
     }
 }

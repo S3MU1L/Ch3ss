@@ -15,6 +15,7 @@ import java.util.concurrent.atomic.AtomicLong;
  */
 public abstract class Piece {
     private static final AtomicLong COUNTER = new AtomicLong();
+    public static final String IMG_FOLDER = "img";
     private final long id = COUNTER.getAndIncrement();
     private final Color color;
     private Board board;

@@ -5,6 +5,7 @@ import src.main.project.Color;
 import src.main.project.Coordinates;
 
 import javax.swing.*;
+import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -105,7 +106,7 @@ public class Pawn extends Piece {
 
     @Override
     public ImageIcon getImageIcon() {
-        String path = getColor().equals(Color.WHITE) ? "img/pawnW.png" : "img/pawnB.png";
+        String path = IMG_FOLDER + File.separator + (getColor().equals(Color.WHITE) ? "pawnW.png" : "pawnB.png");
         return new ImageIcon(path);
     }
 }

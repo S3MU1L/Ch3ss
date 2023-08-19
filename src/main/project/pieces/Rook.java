@@ -5,6 +5,7 @@ import src.main.project.Color;
 import src.main.project.Coordinates;
 
 import javax.swing.*;
+import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -53,7 +54,7 @@ public class Rook extends Piece {
 
     @Override
     public ImageIcon getImageIcon() {
-        String path = getColor().equals(Color.WHITE) ? "img/rookW.png" : "img/rookB.png";
+        String path = IMG_FOLDER + File.separator + (getColor().equals(Color.WHITE) ? "rookW.png" : "rookB.png");
         return new ImageIcon(path);
     }
 

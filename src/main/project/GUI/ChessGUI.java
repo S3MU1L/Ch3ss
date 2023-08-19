@@ -10,6 +10,7 @@ import src.main.project.pieces.Piece;
 import src.main.project.pieces.Queen;
 import src.main.project.pieces.Rook;
 
+import javax.print.attribute.SetOfIntegerSyntax;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
@@ -35,9 +36,7 @@ public class ChessGUI {
     private Coordinates firstClick = null;
     private int whiteSeconds = 600;
     private int blackSeconds = 600;
-
     private Font timeFont = new Font("Comic-Sans", Font.BOLD, 20);
-
 
     public ChessGUI(Board board) {
         this.board = board;
@@ -123,7 +122,8 @@ public class ChessGUI {
                 }
 
                 Piece currPiece = board.getPieceAtCoordinates(x, y);
-                if (currPiece instanceof Pawn && (currPiece.getColor() == src.main.project.Color.WHITE && y == 0 || currPiece.getColor() == src.main.project.Color.BLACK && y == 7)) {
+                if (currPiece instanceof Pawn && (currPiece.getColor() == src.main.project.Color.WHITE && y == 0
+                        || currPiece.getColor() == src.main.project.Color.BLACK && y == 7)) {
                     currPiece = showPawnPromotionDialog(x, y);
                     board.putPiece(currPiece, x, y);
                 }
@@ -166,15 +166,15 @@ public class ChessGUI {
     public void setState() {
         this.state = GameState.gameState(board);
         if (state.equals(GameState.CHECK)) {
-            System.out.println("Check");
+            SoundPlayer.playCheckSound();
         } else if (state.equals(GameState.WHITE)) {
-            System.out.println("White has won");
+            SoundPlayer.playCheckmateSound();
             frame.disable();
         } else if (state.equals(GameState.BLACK)) {
-            System.out.println("Black has won");
+            SoundPlayer.playCheckmateSound();
             frame.disable();
         } else if (state.equals(GameState.DRAW)) {
-            System.out.println("Draw");
+            SoundPlayer.playCheckmateSound();
             frame.disable();
         }
     }

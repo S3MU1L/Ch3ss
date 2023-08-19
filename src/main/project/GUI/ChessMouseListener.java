@@ -44,13 +44,19 @@ public class ChessMouseListener implements MouseListener {
             }
             gui.setPossibleMoves(possibleMoves);
             gui.setFirstClick(coords);
-        } else {
-            if (gui.getPossibleMoves() != null && gui.getPossibleMoves().contains(coords)) {
-                gui.getBoard().getPieceAtCoordinates(gui.getFirstClick()).move(coords);
-                gui.setState();
+        } else if (gui.getPossibleMoves() != null && gui.getPossibleMoves().contains(coords)) {
+            if (gui.getBoard().isEmpty(coords)) {
+                SoundPlayer.playMoveSound();
+            } else {
+                SoundPlayer.playCaptureSound();
             }
+            gui.getBoard().getPieceAtCoordinates(gui.getFirstClick()).move(coords);
+            gui.setState();
             gui.setFirstClick(null);
             gui.setPossibleMoves(null);
+        }
+        else {
+            SoundPlayer.playIllegalSound();
         }
         gui.drawBoard();
     }

@@ -5,6 +5,7 @@ import src.main.project.Color;
 import src.main.project.Coordinates;
 
 import javax.swing.*;
+import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
@@ -138,7 +139,7 @@ public class King extends Piece {
 
     @Override
     public ImageIcon getImageIcon() {
-        String path = getColor().equals(Color.WHITE) ? "img/kingW.png" : "img/kingB.png";
+        String path = IMG_FOLDER + File.separator + (getColor().equals(Color.WHITE) ? "kingW.png" : "kingB.png");
         return new ImageIcon(path);
     }
 
