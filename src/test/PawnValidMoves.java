@@ -6,6 +6,7 @@ import src.main.project.Color;
 import src.main.project.Coordinates;
 import src.main.project.pieces.Pawn;
 import src.main.project.pieces.Piece;
+import src.main.project.players.Player;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -16,12 +17,11 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
  * @author Samuel Malec
  */
 public class PawnValidMoves {
-    private Board board = new Board();
+    private Board board = new Board(new Player(Color.WHITE), new Player(Color.BLACK));
 
 
     @Test
     void correctMovements() {
-        Board board = new Board();
         Piece piece = new Pawn(Color.WHITE, board);
         Coordinates coords = new Coordinates(0, 6);
         board.putPiece(piece, coords);

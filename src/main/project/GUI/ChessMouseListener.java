@@ -1,8 +1,11 @@
 package src.main.project.GUI;
 
+import src.main.project.Board;
+import src.main.project.Color;
 import src.main.project.Coordinates;
 import src.main.project.pieces.King;
 import src.main.project.pieces.Piece;
+import src.main.project.players.BotPlayer;
 
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
@@ -23,7 +26,17 @@ public class ChessMouseListener implements MouseListener {
     }
 
     private int getRow(int y) {
-        return y / ChessGUI.SQUARE_SIZE;
+        int row = y / ChessGUI.SQUARE_SIZE;
+        if (gui.getBoard().getCurrentPlayer() instanceof BotPlayer && gui.getBoard().getCurrentColor().equals(Color.WHITE)) {
+            return Board.BOARD_SIZE - 1 - row;
+        }
+        if (gui.getBoard().getCurrentPlayer() instanceof BotPlayer && gui.getBoard().getCurrentColor().equals(Color.BLACK)) {
+            return row;
+        }
+        if (gui.getBoard().getCurrentColor().equals(Color.WHITE)) {
+            return row;
+        }
+        return Board.BOARD_SIZE - 1 - row;
     }
 
     private int getColumn(int x) {
@@ -51,11 +64,10 @@ public class ChessMouseListener implements MouseListener {
                 SoundPlayer.playCaptureSound();
             }
             gui.getBoard().getPieceAtCoordinates(gui.getFirstClick()).move(coords);
-            gui.setState();
             gui.setFirstClick(null);
             gui.setPossibleMoves(null);
-        }
-        else {
+
+        } else {
             SoundPlayer.playIllegalSound();
         }
         gui.drawBoard();

@@ -3,19 +3,17 @@ package src.main.project.GUI;
 import src.main.project.Board;
 import src.main.project.Coordinates;
 import src.main.project.GameState;
-import src.main.project.pieces.Bishop;
-import src.main.project.pieces.Knight;
 import src.main.project.pieces.Pawn;
 import src.main.project.pieces.Piece;
 import src.main.project.pieces.Queen;
-import src.main.project.pieces.Rook;
+import src.main.project.players.BotPlayer;
+import src.main.project.players.HumanPlayer;
 
-import javax.print.attribute.SetOfIntegerSyntax;
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 
 /**
  * @author Samuel Malec
@@ -28,15 +26,13 @@ public class ChessGUI {
     public static final Color ATTACKED_COLOR = new Color(232, 106, 81);
     public static final Color HIGHLIGHTED_COLOR = new Color(186, 202, 68);
     public static final int RADIUS = 15;
-    private JFrame frame;
-    private JPanel chessPanel;
+    private final JFrame frame;
+    private final JPanel chessPanel;
     private List<Coordinates> possibleMoves = null;
-    private GameState state;
-    private Board board;
+    private final Board board;
     private Coordinates firstClick = null;
-    private int whiteSeconds = 600;
-    private int blackSeconds = 600;
-    private Font timeFont = new Font("Comic-Sans", Font.BOLD, 20);
+    private int whiteMilliseconds = 600000;
+    private int blackMilliseconds = 600000;
 
     public ChessGUI(Board board) {
         this.board = board;
@@ -45,7 +41,8 @@ public class ChessGUI {
         frame.setSize(700, 700);
         frame.setLayout(new BorderLayout());
 
-        JLabel blackTime = new JLabel(secondToString(blackSeconds));
+        JLabel blackTime = new JLabel(millisecondsToString(blackMilliseconds));
+        Font timeFont = new Font("Comic-Sans", Font.BOLD, 20);
         blackTime.setFont(timeFont);
         blackTime.setHorizontalAlignment(SwingConstants.CENTER);
         frame.add(blackTime, BorderLayout.NORTH);
@@ -55,19 +52,26 @@ public class ChessGUI {
         chessPanel.addMouseListener(new ChessMouseListener(this));
         frame.add(chessPanel, BorderLayout.CENTER);
 
-
-        JLabel whiteTime = new JLabel(secondToString(whiteSeconds));
+        JLabel whiteTime = new JLabel(millisecondsToString(whiteMilliseconds));
         whiteTime.setFont(timeFont);
         whiteTime.setHorizontalAlignment(SwingConstants.CENTER);
         frame.add(whiteTime, BorderLayout.SOUTH);
 
-        Timer timer = new Timer(1000, e -> {
-            if (board.getCurrentColor() == src.main.project.Color.BLACK) {
-                blackSeconds--;
-                blackTime.setText(secondToString(blackSeconds));
+        Timer timer = new Timer(250, e -> {
+            if (getBoard().getCurrentColor().equals(src.main.project.Color.WHITE)) {
+                whiteMilliseconds -= 250;
             } else {
-                whiteSeconds--;
-                whiteTime.setText(secondToString(whiteSeconds));
+                blackMilliseconds -= 250;
+            }
+
+            // When two people are playing against each other, black player will use 'white' time label, since the sides switch
+            if (getBoard().getCurrentColor().equals(src.main.project.Color.BLACK) &&
+                    getBoard().getCurrentPlayer() instanceof HumanPlayer && getBoard().getOppositePlayer() instanceof HumanPlayer) {
+                whiteTime.setText(millisecondsToString(blackMilliseconds));
+                blackTime.setText(millisecondsToString(whiteMilliseconds));
+            } else {
+                whiteTime.setText(millisecondsToString(whiteMilliseconds));
+                blackTime.setText(millisecondsToString(blackMilliseconds));
             }
         });
 
@@ -75,18 +79,56 @@ public class ChessGUI {
         frame.setResizable(false);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setVisible(true);
+        if (board.getCurrentPlayer() instanceof BotPlayer) {
+            handleBotPlayer();
+        }
         drawBoard();
     }
 
-    private String secondToString(int blackSeconds) {
-        int minutes = blackSeconds / 60;
-        int seconds = blackSeconds % 60;
-        return minutes + ":" + seconds / 10 + seconds % 10;
+    public List<Coordinates> getPossibleMoves() {
+        return possibleMoves;
+    }
+
+    public void setPossibleMoves(List<Coordinates> possibleMoves) {
+        this.possibleMoves = possibleMoves;
+    }
+
+    public Board getBoard() {
+        return board;
+    }
+
+    public Coordinates getFirstClick() {
+        return firstClick;
+    }
+
+    public void setFirstClick(Coordinates firstClick) {
+        this.firstClick = firstClick;
+    }
+
+    private String millisecondsToString(int milliseconds) {
+        int seconds = milliseconds / 1000;
+        int minutes = seconds / 60;
+        seconds %= 60;
+        return String.format("%02d:%02d", minutes, seconds);
     }
 
     public void drawBoard() {
         chessPanel.removeAll();
-        for (int y = 0; y < BOARD_SIZE; y++) {
+        src.main.project.Color currColor = getBoard().getCurrentColor();
+        if (getBoard().getCurrentPlayer() instanceof BotPlayer) {
+            currColor = currColor.getOppositeColor();
+        }
+
+        int from = 0;
+        int to = BOARD_SIZE;
+        int increment = 1;
+        if (currColor.equals(src.main.project.Color.BLACK)) {
+            from = BOARD_SIZE - 1;
+            to = -1;
+            increment = -1;
+        }
+
+        for (int y = from; y != to; y += increment) {
             for (int x = 0; x < BOARD_SIZE; x++) {
                 JPanel squarePanel = new JPanel();
                 squarePanel.setPreferredSize(new Dimension(SQUARE_SIZE, SQUARE_SIZE));
@@ -124,81 +166,82 @@ public class ChessGUI {
                 Piece currPiece = board.getPieceAtCoordinates(x, y);
                 if (currPiece instanceof Pawn && (currPiece.getColor() == src.main.project.Color.WHITE && y == 0
                         || currPiece.getColor() == src.main.project.Color.BLACK && y == 7)) {
-                    currPiece = showPawnPromotionDialog(x, y);
+                    currPiece = new Queen(currPiece.getColor(), board);
                     board.putPiece(currPiece, x, y);
                 }
-
                 if (currPiece != null) {
                     ImageIcon pieceIcon = currPiece.getImageIcon();
                     JLabel pieceLabel = new JLabel(pieceIcon);
                     squarePanel.add(pieceLabel);
                 }
-
                 chessPanel.add(squarePanel);
             }
         }
         chessPanel.revalidate();
         chessPanel.repaint();
         frame.pack();
+        setState();
+
+        if (board.getCurrentPlayer() instanceof BotPlayer) {
+            handleBotPlayer();
+        }
     }
 
+    public void handleBotPlayer() {
+        Random random = new Random();
+        List<Piece> pieces = board.getPiecesOfColor(board.getCurrentColor());
+        int randomIndex;
+        Piece randPiece;
+        ArrayList<Coordinates> possibleMoves;
+        do {
+            randomIndex = random.nextInt(pieces.size());
+            randPiece = pieces.get(randomIndex);
+            possibleMoves = new ArrayList<>(board.getSafeMovesOfPiece(randPiece));
+        } while (possibleMoves.isEmpty());
 
-    public List<Coordinates> getPossibleMoves() {
-        return possibleMoves;
+        randomIndex = random.nextInt(possibleMoves.size());
+        randPiece.move(possibleMoves.get(randomIndex));
+        drawBoard();
     }
 
-    public void setPossibleMoves(List<Coordinates> possibleMoves) {
-        this.possibleMoves = possibleMoves;
-    }
-
-    public Board getBoard() {
-        return board;
-    }
-
-    public Coordinates getFirstClick() {
-        return firstClick;
-    }
-
-    public void setFirstClick(Coordinates firstClick) {
-        this.firstClick = firstClick;
-    }
 
     public void setState() {
-        this.state = GameState.gameState(board);
+        GameState state = GameState.gameState(board);
         if (state.equals(GameState.CHECK)) {
             SoundPlayer.playCheckSound();
         } else if (state.equals(GameState.WHITE)) {
             SoundPlayer.playCheckmateSound();
-            frame.disable();
+            frame.setEnabled(false);
         } else if (state.equals(GameState.BLACK)) {
             SoundPlayer.playCheckmateSound();
-            frame.disable();
+            frame.setEnabled(false);
         } else if (state.equals(GameState.DRAW)) {
             SoundPlayer.playCheckmateSound();
-            frame.disable();
+            frame.setEnabled(false);
         }
     }
 
-    private Piece showPawnPromotionDialog(int x, int y) {
-        SoundPlayer.playPromoteSound();
-        Object[] options = {"Queen", "Rook", "Bishop", "Knight"};
-        int choice = JOptionPane.showOptionDialog(frame, "Select a piece to promote your pawn:", "Pawn Promotion", JOptionPane.YES_NO_CANCEL_OPTION, JOptionPane.QUESTION_MESSAGE, null, options, options[0]);
-
-        Piece newPiece = null;
-        switch (choice) {
-            case 0:
-                newPiece = new Queen(board.getCurrentColor().getOppositeColor(), board);
-                break;
-            case 1:
-                newPiece = new Rook(board.getCurrentColor().getOppositeColor(), board);
-                break;
-            case 2:
-                newPiece = new Bishop(board.getCurrentColor().getOppositeColor(), board);
-                break;
-            case 3:
-                newPiece = new Knight(board.getCurrentColor().getOppositeColor(), board);
-                break;
-        }
-        return newPiece;
-    }
+    // After hours of debugging I just decided to auto-promote pawns to queens, since this dialog was laggy
+//    private Piece showPawnPromotionDialog() {
+//        SoundPlayer.playPromoteSound();
+//        Object[] options = {"Queen", "Rook", "Bishop", "Knight"};
+//        int choice = JOptionPane.showOptionDialog(frame, "Select a piece to promote your pawn:", "Pawn Promotion", JOptionPane.YES_NO_CANCEL_OPTION, JOptionPane.QUESTION_MESSAGE, null, options, options[0]);
+//
+//        Piece newPiece = null;
+//        switch (choice) {
+//            case 0:
+//                newPiece = new Queen(board.getCurrentColor().getOppositeColor(), board);
+//                break;
+//            case 1:
+//                newPiece = new Rook(board.getCurrentColor().getOppositeColor(), board);
+//                break;
+//            case 2:
+//                newPiece = new Bishop(board.getCurrentColor().getOppositeColor(), board);
+//                break;
+//            case 3:
+//                newPiece = new Knight(board.getCurrentColor().getOppositeColor(), board);
+//                break;
+//        }
+//        return newPiece;
+//    }
 }

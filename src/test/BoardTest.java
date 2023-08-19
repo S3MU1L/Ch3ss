@@ -5,6 +5,7 @@ import src.main.project.Board;
 import src.main.project.Color;
 import src.main.project.pieces.King;
 import src.main.project.pieces.Queen;
+import src.main.project.players.Player;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNull;
@@ -14,7 +15,7 @@ import static org.junit.jupiter.api.Assertions.assertNull;
  * @author Samuel Malec
  */
 public class BoardTest {
-    private final Board board = new Board();
+    private final Board board = new Board(new Player(Color.WHITE), new Player(Color.BLACK));
 
     @Test
     void putPieceAtBoard() {

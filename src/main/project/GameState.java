@@ -13,7 +13,7 @@ public enum GameState {
 
     public static GameState gameState(Board board) {
         Piece king = board.getKingOfColor(board.getCurrentColor());
-        Set<Coordinates> moves = board.getPossibleMovesOfColor(board.getCurrentColor());
+        Set<Coordinates> moves = board.getSafeMovesOfColor(board.getCurrentColor());
         boolean inCheck = ((King) king).isInCheck();
         if (moves.size() == 0 && inCheck) {
             return board.getCurrentColor().equals(Color.WHITE) ? BLACK : WHITE;

@@ -1,5 +1,8 @@
-package src.main.project;
+package src.main.project.players;
 
+import src.main.project.Color;
+
+import javax.swing.*;
 
 /**
  * @author Samuel Malec
@@ -14,4 +17,5 @@ public class Player {
     public Color getColor() {
         return color;
     }
+
 }

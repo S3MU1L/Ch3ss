@@ -8,7 +8,7 @@ public class SoundPlayer {
     public static final String SOUND_FOLDER = "soundfx" + File.separator;
     public static final String CAPTURE = "capture.wav";
     public static final String CASTLE = "castle.wav";
-    public static final String CHECKMATE = "game-end.webm";
+    public static final String CHECKMATE = "game-end.wav";
     public static final String ILLEGAL = "illegal.wav";
     public static final String MOVE = "move.wav";
     public static final String TIME = "no_time.wav";

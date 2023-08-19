@@ -7,6 +7,7 @@ import src.main.project.pieces.Pawn;
 import src.main.project.pieces.Piece;
 import src.main.project.pieces.Queen;
 import src.main.project.pieces.Rook;
+import src.main.project.players.Player;
 
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -20,16 +21,43 @@ import java.util.Set;
 public class Board {
     public static final int BOARD_SIZE = 8;
     private final Piece[][] chessBoard = new Piece[BOARD_SIZE][BOARD_SIZE];
+    private Player currentPlayer;
+    private Player player1;
+    private Player player2;
 
-    private Color currentColor = Color.WHITE;
+    public Board(Player player1, Player player2) {
+        this.player1 = player1;
+        this.player2 = player2;
+        if (player1.getColor().equals(Color.WHITE)) {
+            currentPlayer = player1;
+        } else {
+            currentPlayer = player2;
+        }
+    }
 
     public Color getCurrentColor() {
-        return currentColor;
+        return currentPlayer.getColor();
     }
 
-    public void changeCurrentColor() {
-        currentColor = currentColor.equals(Color.WHITE) ? Color.BLACK : Color.WHITE;
+    public Player getCurrentPlayer() {
+        return currentPlayer;
     }
+
+    public Player getOppositePlayer() {
+        if (currentPlayer.equals(player1)) {
+            return player2;
+        }
+        return player1;
+    }
+
+    public void changeCurrentPlayer() {
+        if (currentPlayer.equals(player1)) {
+            currentPlayer = player2;
+        } else {
+            currentPlayer = player1;
+        }
+    }
+
 
     public void initializeBoard() {
         for (int x = 0; x < BOARD_SIZE; x++) {
@@ -82,7 +110,6 @@ public class Board {
         for (int j = 0; j < BOARD_SIZE; j++) {
             sb.append(" ").append((char) ('A' + j)).append("  ");
         }
-
         return sb.toString();
     }
 
@@ -100,8 +127,8 @@ public class Board {
         return null;
     }
 
-    public Piece putPiece(Piece piece, Coordinates coords) {
-        return putPiece(piece, coords.x(), coords.y());
+    public void putPiece(Piece piece, Coordinates coords) {
+        putPiece(piece, coords.x(), coords.y());
     }
 
     public Piece putPiece(Piece piece, int x, int y) {
@@ -186,7 +213,7 @@ public class Board {
         return result;
     }
 
-    public Set<Coordinates> getPossibleMovesOfColor(Color color) {
+    public Set<Coordinates> getSafeMovesOfColor(Color color) {
         List<Piece> pieces = getPiecesOfColor(color);
         Set<Coordinates> result = new HashSet<>();
         for (var piece : pieces) {
@@ -195,15 +222,12 @@ public class Board {
         return result;
     }
 
-
     public List<Coordinates> getSafeMovesOfPiece(Piece piece) {
         List<Coordinates> allPossibleMoves = piece.getPossibleMoves();
         List<Coordinates> result = new ArrayList<>();
-
-        if (allPossibleMoves.size() == 0) {
+        if (allPossibleMoves.isEmpty()) {
             return result;
         }
-
         Coordinates originalPieceCoords = getCoordinatesOfPiece(piece);
 
         for (Coordinates coord : allPossibleMoves) {
