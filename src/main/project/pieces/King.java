@@ -3,6 +3,7 @@ package src.main.project.pieces;
 import src.main.project.Board;
 import src.main.project.Color;
 import src.main.project.Coordinates;
+import src.main.project.GUI.SoundPlayer;
 
 import javax.swing.*;
 import java.io.File;
@@ -129,7 +130,7 @@ public class King extends Piece {
                 rookX = 0;
                 rookNewX = x + 1;
             }
-
+            SoundPlayer.playCastleSound();
             Piece rook = getBoard().getPieceAtCoordinates(rookX, y);
             getBoard().movePiece(rook, rookNewX, y);
         }

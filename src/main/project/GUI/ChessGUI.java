@@ -180,6 +180,7 @@ public class ChessGUI {
     }
 
     private Piece showPawnPromotionDialog(int x, int y) {
+        SoundPlayer.playPromoteSound();
         Object[] options = {"Queen", "Rook", "Bishop", "Knight"};
         int choice = JOptionPane.showOptionDialog(frame, "Select a piece to promote your pawn:", "Pawn Promotion", JOptionPane.YES_NO_CANCEL_OPTION, JOptionPane.QUESTION_MESSAGE, null, options, options[0]);
 
