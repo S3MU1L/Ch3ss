@@ -15,6 +15,9 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
+import static src.main.project.GameState.CHECK;
+import static src.main.project.GameState.PLAYING;
+
 /**
  * @author Samuel Malec
  */
@@ -33,6 +36,8 @@ public class ChessGUI {
     private Coordinates firstClick = null;
     private int whiteMilliseconds = 600000;
     private int blackMilliseconds = 600000;
+    private GameState gameState = PLAYING;
+    private final Timer timer;
 
     public ChessGUI(Board board) {
         this.board = board;
@@ -47,7 +52,6 @@ public class ChessGUI {
         blackTime.setHorizontalAlignment(SwingConstants.CENTER);
         frame.add(blackTime, BorderLayout.NORTH);
 
-
         chessPanel = new JPanel(new GridLayout(BOARD_SIZE, BOARD_SIZE));
         chessPanel.addMouseListener(new ChessMouseListener(this));
         frame.add(chessPanel, BorderLayout.CENTER);
@@ -57,7 +61,7 @@ public class ChessGUI {
         whiteTime.setHorizontalAlignment(SwingConstants.CENTER);
         frame.add(whiteTime, BorderLayout.SOUTH);
 
-        Timer timer = new Timer(250, e -> {
+        timer = new Timer(250, e -> {
             if (getBoard().getCurrentColor().equals(src.main.project.Color.WHITE)) {
                 whiteMilliseconds -= 250;
             } else {
@@ -67,6 +71,9 @@ public class ChessGUI {
             // When two people are playing against each other, black player will use 'white' time label, since the sides switch
             if (getBoard().getCurrentColor().equals(src.main.project.Color.BLACK) &&
                     getBoard().getCurrentPlayer() instanceof HumanPlayer && getBoard().getOppositePlayer() instanceof HumanPlayer) {
+                whiteTime.setText(millisecondsToString(blackMilliseconds));
+                blackTime.setText(millisecondsToString(whiteMilliseconds));
+            } else if (getBoard().getOppositePlayer().getColor().equals(src.main.project.Color.WHITE) && getBoard().getOppositePlayer() instanceof BotPlayer) {
                 whiteTime.setText(millisecondsToString(blackMilliseconds));
                 blackTime.setText(millisecondsToString(whiteMilliseconds));
             } else {
@@ -181,8 +188,7 @@ public class ChessGUI {
         chessPanel.repaint();
         frame.pack();
         setState();
-
-        if (board.getCurrentPlayer() instanceof BotPlayer) {
+        if ((gameState.equals(PLAYING) || gameState.equals(CHECK)) && board.getCurrentPlayer() instanceof BotPlayer) {
             handleBotPlayer();
         }
     }
@@ -204,22 +210,32 @@ public class ChessGUI {
         drawBoard();
     }
 
-
     public void setState() {
-        GameState state = GameState.gameState(board);
-        if (state.equals(GameState.CHECK)) {
-            SoundPlayer.playCheckSound();
-        } else if (state.equals(GameState.WHITE)) {
-            SoundPlayer.playCheckmateSound();
-            frame.setEnabled(false);
-        } else if (state.equals(GameState.BLACK)) {
-            SoundPlayer.playCheckmateSound();
-            frame.setEnabled(false);
-        } else if (state.equals(GameState.DRAW)) {
-            SoundPlayer.playCheckmateSound();
-            frame.setEnabled(false);
+        gameState = GameState.gameState(board);
+        if (gameState.equals(PLAYING)) {
+            return;
         }
+
+        if (gameState.equals(CHECK)) {
+            SoundPlayer.playCheckSound();
+            return;
+        }
+
+        if (gameState.equals(GameState.WHITE)) {
+            SoundPlayer.playCheckmateSound();
+            JOptionPane.showMessageDialog(frame, "White has won!", "Game Over", JOptionPane.INFORMATION_MESSAGE);
+        } else if (gameState.equals(GameState.BLACK)) {
+            SoundPlayer.playCheckmateSound();
+            JOptionPane.showMessageDialog(frame, "Black has won!", "Game Over", JOptionPane.INFORMATION_MESSAGE);
+        } else if (gameState.equals(GameState.DRAW)) {
+            SoundPlayer.playCheckmateSound();
+            JOptionPane.showMessageDialog(frame, "It's a draw!", "Game Over", JOptionPane.INFORMATION_MESSAGE);
+        }
+
+        frame.setEnabled(false);
+        timer.stop();
     }
+
 
     // After hours of debugging I just decided to auto-promote pawns to queens, since this dialog was laggy
 //    private Piece showPawnPromotionDialog() {
