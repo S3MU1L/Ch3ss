@@ -1,7 +1,5 @@
 package src.test;
 
-import static org.junit.jupiter.api.Assertions.*;
-
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import src.main.project.Board;
@@ -12,6 +10,8 @@ import src.main.project.players.Player;
 
 import java.util.List;
 import java.util.Set;
+
+import static org.junit.jupiter.api.Assertions.*;
 
 public class BoardTest {
     private Board board;
