@@ -1,8 +1,8 @@
 package src.main.project.GUI;
 
-import src.main.project.Board;
-import src.main.project.Coordinates;
-import src.main.project.GameState;
+import src.main.project.board.Board;
+import src.main.project.board.Coordinates;
+import src.main.project.board.GameState;
 import src.main.project.pieces.Pawn;
 import src.main.project.pieces.Piece;
 import src.main.project.pieces.Queen;
@@ -15,8 +15,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
-import static src.main.project.GameState.CHECK;
-import static src.main.project.GameState.PLAYING;
+import static src.main.project.board.GameState.CHECK;
+import static src.main.project.board.GameState.PLAYING;
 
 /**
  * @author Samuel Malec
@@ -62,18 +62,16 @@ public class ChessGUI {
         frame.add(whiteTime, BorderLayout.SOUTH);
 
         timer = new Timer(250, e -> {
-            if (getBoard().getCurrentColor().equals(src.main.project.Color.WHITE)) {
+            if (getBoard().getCurrentColor().equals(src.main.project.board.Color.WHITE)) {
                 whiteMilliseconds -= 250;
             } else {
                 blackMilliseconds -= 250;
             }
 
-            // When two people are playing against each other, black player will use 'white' time label, since the sides switch
-            if (getBoard().getCurrentColor().equals(src.main.project.Color.BLACK) &&
-                    getBoard().getCurrentPlayer() instanceof HumanPlayer && getBoard().getOppositePlayer() instanceof HumanPlayer) {
-                whiteTime.setText(millisecondsToString(blackMilliseconds));
-                blackTime.setText(millisecondsToString(whiteMilliseconds));
-            } else if (getBoard().getOppositePlayer().getColor().equals(src.main.project.Color.WHITE) && getBoard().getOppositePlayer() instanceof BotPlayer) {
+            if ((getBoard().getCurrentColor() == src.main.project.board.Color.BLACK) &&
+                    (getBoard().getCurrentPlayer() instanceof HumanPlayer) &&
+                    (getBoard().getOppositePlayer() instanceof HumanPlayer) ||
+                    (getBoard().getOppositePlayer().getColor() == src.main.project.board.Color.WHITE && getBoard().getOppositePlayer() instanceof BotPlayer)) {
                 whiteTime.setText(millisecondsToString(blackMilliseconds));
                 blackTime.setText(millisecondsToString(whiteMilliseconds));
             } else {
@@ -121,7 +119,7 @@ public class ChessGUI {
 
     public void drawBoard() {
         chessPanel.removeAll();
-        src.main.project.Color currColor = getBoard().getCurrentColor();
+        src.main.project.board.Color currColor = getBoard().getCurrentColor();
         if (getBoard().getCurrentPlayer() instanceof BotPlayer) {
             currColor = currColor.getOppositeColor();
         }
@@ -129,7 +127,7 @@ public class ChessGUI {
         int from = 0;
         int to = BOARD_SIZE;
         int increment = 1;
-        if (currColor.equals(src.main.project.Color.BLACK)) {
+        if (currColor.equals(src.main.project.board.Color.BLACK)) {
             from = BOARD_SIZE - 1;
             to = -1;
             increment = -1;
@@ -171,8 +169,8 @@ public class ChessGUI {
                 }
 
                 Piece currPiece = board.getPieceAtCoordinates(x, y);
-                if (currPiece instanceof Pawn && (currPiece.getColor() == src.main.project.Color.WHITE && y == 0
-                        || currPiece.getColor() == src.main.project.Color.BLACK && y == 7)) {
+                if (currPiece instanceof Pawn && (currPiece.getColor() == src.main.project.board.Color.WHITE && y == 0
+                        || currPiece.getColor() == src.main.project.board.Color.BLACK && y == 7)) {
                     currPiece = new Queen(currPiece.getColor(), board);
                     board.putPiece(currPiece, x, y);
                 }
@@ -236,28 +234,4 @@ public class ChessGUI {
         timer.stop();
     }
 
-
-    // After hours of debugging I just decided to auto-promote pawns to queens, since this dialog was laggy
-//    private Piece showPawnPromotionDialog() {
-//        SoundPlayer.playPromoteSound();
-//        Object[] options = {"Queen", "Rook", "Bishop", "Knight"};
-//        int choice = JOptionPane.showOptionDialog(frame, "Select a piece to promote your pawn:", "Pawn Promotion", JOptionPane.YES_NO_CANCEL_OPTION, JOptionPane.QUESTION_MESSAGE, null, options, options[0]);
-//
-//        Piece newPiece = null;
-//        switch (choice) {
-//            case 0:
-//                newPiece = new Queen(board.getCurrentColor().getOppositeColor(), board);
-//                break;
-//            case 1:
-//                newPiece = new Rook(board.getCurrentColor().getOppositeColor(), board);
-//                break;
-//            case 2:
-//                newPiece = new Bishop(board.getCurrentColor().getOppositeColor(), board);
-//                break;
-//            case 3:
-//                newPiece = new Knight(board.getCurrentColor().getOppositeColor(), board);
-//                break;
-//        }
-//        return newPiece;
-//    }
 }

@@ -1,4 +1,4 @@
-package src.main.project;
+package src.main.project.board;
 
 import src.main.project.pieces.King;
 import src.main.project.pieces.Piece;

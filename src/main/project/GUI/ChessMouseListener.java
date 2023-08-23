@@ -1,8 +1,8 @@
 package src.main.project.GUI;
 
-import src.main.project.Board;
-import src.main.project.Color;
-import src.main.project.Coordinates;
+import src.main.project.board.Board;
+import src.main.project.board.Color;
+import src.main.project.board.Coordinates;
 import src.main.project.pieces.King;
 import src.main.project.pieces.Piece;
 import src.main.project.players.BotPlayer;

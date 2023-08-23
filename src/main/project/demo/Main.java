@@ -1,7 +1,7 @@
 package src.main.project.demo;
 
-import src.main.project.Board;
-import src.main.project.Color;
+import src.main.project.board.Board;
+import src.main.project.board.Color;
 import src.main.project.GUI.ChessGUI;
 import src.main.project.players.BotPlayer;
 import src.main.project.players.HumanPlayer;

@@ -1,9 +1,9 @@
 package src.test;
 
 import org.junit.jupiter.api.Test;
-import src.main.project.Board;
-import src.main.project.Coordinates;
-import src.main.project.Notation;
+import src.main.project.board.Board;
+import src.main.project.board.Coordinates;
+import src.main.project.board.Notation;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
