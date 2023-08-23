@@ -7,6 +7,7 @@ import src.main.project.GUI.SoundPlayer;
 
 import javax.swing.*;
 import java.io.File;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
@@ -140,8 +141,10 @@ public class King extends Piece {
 
     @Override
     public ImageIcon getImageIcon() {
-        String path = IMG_FOLDER + File.separator + (getColor().equals(Color.WHITE) ? "kingW.png" : "kingB.png");
-        return new ImageIcon(path);
+        String imageName = getColor().equals(Color.WHITE) ? "kingW.png" : "kingB.png";
+        URL imageURL = getClass().getResource("/img/" + imageName);
+        assert imageURL != null;
+        return new ImageIcon(imageURL);
     }
 
     @Override

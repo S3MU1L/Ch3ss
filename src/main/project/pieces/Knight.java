@@ -6,6 +6,7 @@ import src.main.project.Coordinates;
 
 import javax.swing.*;
 import java.io.File;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -54,8 +55,10 @@ public class Knight extends Piece {
 
     @Override
     public ImageIcon getImageIcon() {
-        String path = IMG_FOLDER + File.separator + (getColor().equals(Color.WHITE) ? "knightW.png" : "knightB.png");
-        return new ImageIcon(path);
+        String imageName = getColor().equals(Color.WHITE) ? "knightW.png" : "knightB.png";
+        URL imageURL = getClass().getResource("/img/" + imageName);
+        assert imageURL != null;
+        return new ImageIcon(imageURL);
     }
 
     @Override
