@@ -1,11 +1,10 @@
 package src.main.project.pieces;
 
-import src.main.project.Board;
-import src.main.project.Color;
-import src.main.project.Coordinates;
+import src.main.project.board.Board;
+import src.main.project.board.Color;
+import src.main.project.board.Coordinates;
 
 import javax.swing.*;
-import java.io.File;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
@@ -56,7 +55,7 @@ public class Knight extends Piece {
     @Override
     public ImageIcon getImageIcon() {
         String imageName = getColor().equals(Color.WHITE) ? "knightW.png" : "knightB.png";
-        URL imageURL = getClass().getResource("/img/" + imageName);
+        URL imageURL = getClass().getResource(IMG_FOLDER + imageName);
         assert imageURL != null;
         return new ImageIcon(imageURL);
     }

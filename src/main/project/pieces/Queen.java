@@ -1,9 +1,9 @@
 package src.main.project.pieces;
 
 
-import src.main.project.Board;
-import src.main.project.Color;
-import src.main.project.Coordinates;
+import src.main.project.board.Board;
+import src.main.project.board.Color;
+import src.main.project.board.Coordinates;
 
 import javax.swing.*;
 import java.io.File;
@@ -45,7 +45,7 @@ public class Queen extends Piece {
     @Override
     public ImageIcon getImageIcon() {
         String imageName = getColor().equals(Color.WHITE) ? "queenW.png" : "queenB.png";
-        URL imageURL = getClass().getResource("/img/" + imageName);
+        URL imageURL = getClass().getResource(File.separator + "img" + File.separator + imageName);
         assert imageURL != null;
         return new ImageIcon(imageURL);
     }

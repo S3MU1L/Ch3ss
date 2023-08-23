@@ -1,8 +1,13 @@
 package src.main.project.GUI;
 
-import javax.sound.sampled.*;
+import javax.sound.sampled.AudioInputStream;
+import javax.sound.sampled.AudioSystem;
+import javax.sound.sampled.Clip;
+import javax.sound.sampled.LineUnavailableException;
+import javax.sound.sampled.UnsupportedAudioFileException;
 import java.io.File;
 import java.io.IOException;
+import java.net.URL;
 
 public class SoundPlayer {
     public static final String SOUND_FOLDER = "soundfx" + File.separator;
@@ -17,8 +22,8 @@ public class SoundPlayer {
 
     private static void playSound(String soundPath) {
         try {
-            File soundFile = new File(soundPath);
-            AudioInputStream audioInputStream = AudioSystem.getAudioInputStream(soundFile);
+            URL soundURL = SoundPlayer.class.getResource(File.separator + soundPath);
+            AudioInputStream audioInputStream = AudioSystem.getAudioInputStream(soundURL);
             Clip clip = AudioSystem.getClip();
             clip.open(audioInputStream);
             clip.start();

@@ -1,11 +1,12 @@
 package src.main.project.pieces;
 
 
-import src.main.project.Board;
-import src.main.project.Color;
-import src.main.project.Coordinates;
+import src.main.project.board.Board;
+import src.main.project.board.Color;
+import src.main.project.board.Coordinates;
 
 import javax.swing.*;
+import java.io.File;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicLong;
 
@@ -15,10 +16,10 @@ import java.util.concurrent.atomic.AtomicLong;
  */
 public abstract class Piece {
     private static final AtomicLong COUNTER = new AtomicLong();
-    public static final String IMG_FOLDER = "img";
+    protected final String IMG_FOLDER = File.separator + "img" + File.separator;
     private final long id = COUNTER.getAndIncrement();
     private final Color color;
-    private Board board;
+    private final Board board;
 
     public Piece(Color color, Board board) {
         this.color = color;
