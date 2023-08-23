@@ -20,7 +20,6 @@ public class Main {
         Player first = new HumanPlayer(firstColor);
         Player second = new BotPlayer(firstColor.getOppositeColor());
         Board board = new Board(first, second);
-        board.initializeBoard();
         ChessGUI gui = new ChessGUI(board);
     }
 }

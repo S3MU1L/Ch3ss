@@ -22,8 +22,8 @@ public class Board {
     public static final int BOARD_SIZE = 8;
     private final Piece[][] chessBoard = new Piece[BOARD_SIZE][BOARD_SIZE];
     private Player currentPlayer;
-    private Player player1;
-    private Player player2;
+    private final Player player1;
+    private final Player player2;
 
     public Board(Player player1, Player player2) {
         this.player1 = player1;
@@ -33,6 +33,7 @@ public class Board {
         } else {
             currentPlayer = player2;
         }
+        initializeBoard();
     }
 
     public Color getCurrentColor() {
@@ -131,9 +132,8 @@ public class Board {
         putPiece(piece, coords.x(), coords.y());
     }
 
-    public Piece putPiece(Piece piece, int x, int y) {
+    public void putPiece(Piece piece, int x, int y) {
         chessBoard[y][x] = piece;
-        return piece;
     }
 
     public void movePiece(Piece piece, Coordinates coords) {
