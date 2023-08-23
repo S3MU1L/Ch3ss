@@ -7,7 +7,7 @@ import src.main.project.pieces.Pawn;
 import src.main.project.pieces.Piece;
 import src.main.project.pieces.Queen;
 import src.main.project.players.BotPlayer;
-import src.main.project.players.HumanPlayer;
+import src.main.project.players.PlayerTimeConstants;
 
 import javax.swing.*;
 import java.awt.*;
@@ -15,6 +15,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
+import static src.main.project.GUI.GUIConstants.*;
 import static src.main.project.board.GameState.CHECK;
 import static src.main.project.board.GameState.PLAYING;
 
@@ -22,22 +23,14 @@ import static src.main.project.board.GameState.PLAYING;
  * @author Samuel Malec
  */
 public class ChessGUI {
-    public static final int BOARD_SIZE = 8;
-    public static final int SQUARE_SIZE = 80;
-    public static final Color WHITE_COLOR = new Color(238, 238, 210);
-    public static final Color BLACK_COLOR = new Color(118, 150, 86);
-    public static final Color ATTACKED_COLOR = new Color(232, 106, 81);
-    public static final Color HIGHLIGHTED_COLOR = new Color(186, 202, 68);
-    public static final int RADIUS = 15;
     private final JFrame frame;
     private final JPanel chessPanel;
-    private List<Coordinates> possibleMoves = null;
     private final Board board;
     private Coordinates firstClick = null;
-    private int whiteMilliseconds = 600000;
-    private int blackMilliseconds = 600000;
+    private List<Coordinates> possibleMoves = null;
     private GameState gameState = PLAYING;
     private final Timer timer;
+    private boolean timerTicked = false;
 
     public ChessGUI(Board board) {
         this.board = board;
@@ -46,56 +39,39 @@ public class ChessGUI {
         frame.setSize(700, 700);
         frame.setLayout(new BorderLayout());
 
-        JLabel blackTime = new JLabel(millisecondsToString(blackMilliseconds));
+        JLabel opponentTime = new JLabel(millisecondsToString(getBoard().getOppositePlayer().getTimeLeft()));
         Font timeFont = new Font("Comic-Sans", Font.BOLD, 20);
-        blackTime.setFont(timeFont);
-        blackTime.setHorizontalAlignment(SwingConstants.CENTER);
-        frame.add(blackTime, BorderLayout.NORTH);
+        opponentTime.setFont(timeFont);
+        opponentTime.setHorizontalAlignment(SwingConstants.CENTER);
+        frame.add(opponentTime, BorderLayout.NORTH);
 
         chessPanel = new JPanel(new GridLayout(BOARD_SIZE, BOARD_SIZE));
         chessPanel.addMouseListener(new ChessMouseListener(this));
         frame.add(chessPanel, BorderLayout.CENTER);
 
-        JLabel whiteTime = new JLabel(millisecondsToString(whiteMilliseconds));
-        whiteTime.setFont(timeFont);
-        whiteTime.setHorizontalAlignment(SwingConstants.CENTER);
-        frame.add(whiteTime, BorderLayout.SOUTH);
+        JLabel myTime = new JLabel(millisecondsToString(getBoard().getCurrentPlayer().getTimeLeft()));
+        myTime.setFont(timeFont);
+        myTime.setHorizontalAlignment(SwingConstants.CENTER);
+        frame.add(myTime, BorderLayout.SOUTH);
 
         timer = new Timer(250, e -> {
-            if (getBoard().getCurrentColor().equals(src.main.project.board.Color.WHITE)) {
-                whiteMilliseconds -= 250;
-            } else {
-                blackMilliseconds -= 250;
+            getBoard().getCurrentPlayer().decrementTime();
+            if (getBoard().getCurrentPlayer().getTimeLeft() < PlayerTimeConstants.START_TIME / 10 && !timerTicked) {
+                timerTicked = true;
+                SoundPlayer.playTimeSound();
             }
-
-            if ((getBoard().getCurrentColor() == src.main.project.board.Color.BLACK) &&
-                    (getBoard().getCurrentPlayer() instanceof HumanPlayer) &&
-                    (getBoard().getOppositePlayer() instanceof HumanPlayer) ||
-                    (getBoard().getOppositePlayer().getColor() == src.main.project.board.Color.WHITE && getBoard().getOppositePlayer() instanceof BotPlayer)) {
-                whiteTime.setText(millisecondsToString(blackMilliseconds));
-                blackTime.setText(millisecondsToString(whiteMilliseconds));
-            } else {
-                whiteTime.setText(millisecondsToString(whiteMilliseconds));
-                blackTime.setText(millisecondsToString(blackMilliseconds));
-            }
+            myTime.setText(millisecondsToString(getBoard().getCurrentPlayer().getTimeLeft()));
+            opponentTime.setText(millisecondsToString(getBoard().getOppositePlayer().getTimeLeft()));
         });
 
         timer.start();
         frame.setResizable(false);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        frame.setVisible(true);
         if (board.getCurrentPlayer() instanceof BotPlayer) {
             handleBotPlayer();
         }
         drawBoard();
-    }
-
-    public List<Coordinates> getPossibleMoves() {
-        return possibleMoves;
-    }
-
-    public void setPossibleMoves(List<Coordinates> possibleMoves) {
-        this.possibleMoves = possibleMoves;
+        frame.setVisible(true);
     }
 
     public Board getBoard() {
@@ -185,10 +161,6 @@ public class ChessGUI {
         chessPanel.revalidate();
         chessPanel.repaint();
         frame.pack();
-        setState();
-        if ((gameState.equals(PLAYING) || gameState.equals(CHECK)) && board.getCurrentPlayer() instanceof BotPlayer) {
-            handleBotPlayer();
-        }
     }
 
     public void handleBotPlayer() {
@@ -210,6 +182,11 @@ public class ChessGUI {
 
     public void setState() {
         gameState = GameState.gameState(board);
+        if ((gameState.equals(PLAYING) || gameState.equals(CHECK)) && board.getCurrentPlayer() instanceof BotPlayer) {
+            handleBotPlayer();
+            return;
+        }
+
         if (gameState.equals(PLAYING)) {
             return;
         }
@@ -234,4 +211,15 @@ public class ChessGUI {
         timer.stop();
     }
 
+    public List<Coordinates> getPossibleMoves() {
+        return possibleMoves;
+    }
+
+    public void setPossibleMoves(List<Coordinates> possibleMoves) {
+        this.possibleMoves = possibleMoves;
+    }
+
+    public void resetTimerTick() {
+        timerTicked = false;
+    }
 }

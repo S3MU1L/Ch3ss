@@ -69,10 +69,6 @@ public class Pawn extends Piece {
         return getColor().equals(Color.WHITE) ? "♟" : "♙";
     }
 
-    public boolean isFirstMove() {
-        return firstMove;
-    }
-
     public boolean isEnPassantPossible() {
         return enPassantPossible;
     }
@@ -96,11 +92,7 @@ public class Pawn extends Piece {
 
         board.putPiece(null, coords.x(), coords.y());
         board.putPiece(this, x, y);
-        if (firstMove && Math.abs(coords.y() - y) == 2) {
-            enPassantPossible = true;
-        } else {
-            enPassantPossible = false;
-        }
+        enPassantPossible = firstMove && Math.abs(coords.y() - y) == 2;
         firstMove = false;
     }
 

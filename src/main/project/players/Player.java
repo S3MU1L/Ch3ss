@@ -21,7 +21,7 @@ public class Player {
         return timeLeft;
     }
 
-    public void decrement() {
+    public void decrementTime() {
         timeLeft -= PlayerTimeConstants.DECREMENT;
     }
 

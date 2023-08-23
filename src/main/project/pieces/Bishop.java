@@ -19,7 +19,7 @@ public class Bishop extends Piece {
 
     @Override
     public String toString() {
-        return getColor().equals(Color.WHITE) ? "\u265D" : "\u2657";
+        return getColor().equals(Color.WHITE) ? "♝" : "♗";
     }
 
     @Override

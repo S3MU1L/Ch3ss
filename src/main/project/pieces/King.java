@@ -17,19 +17,13 @@ import java.util.Set;
 public class King extends Piece {
     private boolean hasMoved = false;
 
-    private boolean isAttacked = false;
-
     public King(Color color, Board board) {
         super(color, board);
     }
 
     public boolean isInCheck() {
         List<Piece> oppositePieces = getBoard().getPiecesOfColor(getColor().getOppositeColor());
-        if (getBoard().getAllAttackedCoords(oppositePieces).contains(getBoard().getCoordinatesOfPiece(this))) {
-            isAttacked = false;
-            return true;
-        }
-        return false;
+        return getBoard().getAllAttackedCoords(oppositePieces).contains(getBoard().getCoordinatesOfPiece(this));
     }
 
     @Override
@@ -88,12 +82,8 @@ public class King extends Piece {
             }
         }
 
-        if (attackedSquares.contains(coords) || attackedSquares.contains(new Coordinates(coords.x() - 1, kingY)) ||
-                attackedSquares.contains(new Coordinates(coords.x() - 2, kingY))) {
-            return false;
-        }
-
-        return true;
+        return !attackedSquares.contains(coords) && !attackedSquares.contains(new Coordinates(coords.x() - 1, kingY)) &&
+                !attackedSquares.contains(new Coordinates(coords.x() - 2, kingY));
     }
 
     private boolean canCastleKingSide(Coordinates coords, Set<Coordinates> attackedSquares) {
@@ -110,12 +100,8 @@ public class King extends Piece {
             }
         }
 
-        if (attackedSquares.contains(coords) || attackedSquares.contains(new Coordinates(coords.x() + 1, kingY)) ||
-                attackedSquares.contains(new Coordinates(coords.x() + 2, kingY))) {
-            return false;
-        }
-
-        return true;
+        return !attackedSquares.contains(coords) && !attackedSquares.contains(new Coordinates(coords.x() + 1, kingY)) &&
+                !attackedSquares.contains(new Coordinates(coords.x() + 2, kingY));
     }
 
     @Override
@@ -151,11 +137,4 @@ public class King extends Piece {
         return getColor().equals(Color.WHITE) ? "♚" : "♔";
     }
 
-    public boolean isAttacked() {
-        return isAttacked;
-    }
-
-    public void setAttacked(boolean attacked) {
-        isAttacked = attacked;
-    }
 }

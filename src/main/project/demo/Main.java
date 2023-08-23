@@ -13,7 +13,7 @@ import java.util.Random;
  * @author Samuel Malec
  */
 public class Main {
-    public static void main(String[] args) {
+    public static void main(String[] args) throws InterruptedException {
         Random rand = new Random();
         int x = rand.nextInt(2);
         Color firstColor = x == 1 ? Color.BLACK : Color.WHITE;

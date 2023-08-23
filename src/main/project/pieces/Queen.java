@@ -24,11 +24,10 @@ public class Queen extends Piece {
     public List<Coordinates> getPossibleMoves() {
         Rook rook = new Rook(getColor(), getBoard());
         Bishop bishop = new Bishop(getColor(), getBoard());
-        List<Coordinates> result = new ArrayList<>();
         Coordinates queenCoordinates = getBoard().getCoordinatesOfPiece(this);
 
         getBoard().putPiece(rook, queenCoordinates);
-        result.addAll(rook.getPossibleMoves());
+        List<Coordinates> result = new ArrayList<>(rook.getPossibleMoves());
 
         getBoard().putPiece(bishop, queenCoordinates);
         result.addAll(bishop.getPossibleMoves());
