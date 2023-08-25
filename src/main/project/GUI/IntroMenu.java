@@ -12,6 +12,7 @@ import static src.main.project.GUI.GUIConstants.*;
 public class IntroMenu {
     public IntroMenu() {
         JFrame frame = new JFrame("Main Menu");
+        frame.setResizable(false);
         frame.setSize(600, 600);
         frame.setVisible(true);
         frame.setLayout(new BorderLayout());
