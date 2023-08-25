@@ -13,4 +13,7 @@ public class GUIConstants {
     public static final Color ATTACKED_COLOR = new Color(232, 106, 81);
     public static final Color HIGHLIGHTED_COLOR = new Color(186, 202, 68);
     public static final int RADIUS = 15;
+    public static final Font WELCOME_FONT = new Font("Comic-sans", Font.BOLD, 20);
+    public static final int PADDING = 20;
+    public static final int NORTH_PADDING = 200;
 }

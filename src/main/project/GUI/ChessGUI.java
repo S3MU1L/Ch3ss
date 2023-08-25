@@ -1,4 +1,4 @@
-package src.main.project.GUI.chessBoardGUI;
+package src.main.project.GUI;
 
 import src.main.project.board.Board;
 import src.main.project.board.Coordinates;
@@ -15,7 +15,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
-import static src.main.project.GUI.chessBoardGUI.GUIConstants.*;
+import static src.main.project.GUI.GUIConstants.*;
 import static src.main.project.board.GameState.CHECK;
 import static src.main.project.board.GameState.PLAYING;
 
@@ -149,6 +149,7 @@ public class ChessGUI {
                         || currPiece.getColor() == src.main.project.board.Color.BLACK && y == 7)) {
                     currPiece = new Queen(currPiece.getColor(), board);
                     board.putPiece(currPiece, x, y);
+                    SoundPlayer.playPromoteSound();
                 }
                 if (currPiece != null) {
                     ImageIcon pieceIcon = currPiece.getImageIcon();

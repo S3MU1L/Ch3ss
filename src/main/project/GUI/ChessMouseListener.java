@@ -1,4 +1,4 @@
-package src.main.project.GUI.chessBoardGUI;
+package src.main.project.GUI;
 
 import src.main.project.board.Board;
 import src.main.project.board.Color;
@@ -11,13 +11,13 @@ import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.util.List;
 
-import static src.main.project.GUI.chessBoardGUI.GUIConstants.SQUARE_SIZE;
+import static src.main.project.GUI.GUIConstants.SQUARE_SIZE;
 
 /**
  * @author Samuel Malec
  */
 public class ChessMouseListener implements MouseListener {
-    private ChessGUI gui;
+    private final ChessGUI gui;
 
     public ChessMouseListener(ChessGUI gui) {
         this.gui = gui;
