@@ -1,4 +1,4 @@
-package src.main.project.GUI;
+package src.main.project.GUI.chessBoardGUI;
 
 import src.main.project.board.Board;
 import src.main.project.board.Color;
@@ -11,7 +11,7 @@ import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.util.List;
 
-import static src.main.project.GUI.GUIConstants.SQUARE_SIZE;
+import static src.main.project.GUI.chessBoardGUI.GUIConstants.SQUARE_SIZE;
 
 /**
  * @author Samuel Malec

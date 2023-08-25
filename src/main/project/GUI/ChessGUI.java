@@ -1,4 +1,4 @@
-package src.main.project.GUI;
+package src.main.project.GUI.chessBoardGUI;
 
 import src.main.project.board.Board;
 import src.main.project.board.Coordinates;
@@ -15,7 +15,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
-import static src.main.project.GUI.GUIConstants.*;
+import static src.main.project.GUI.chessBoardGUI.GUIConstants.*;
 import static src.main.project.board.GameState.CHECK;
 import static src.main.project.board.GameState.PLAYING;
 

@@ -1,4 +1,4 @@
-package src.main.project.GUI;
+package src.main.project.GUI.chessBoardGUI;
 
 import javax.sound.sampled.AudioInputStream;
 import javax.sound.sampled.AudioSystem;
