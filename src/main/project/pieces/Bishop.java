@@ -58,4 +58,9 @@ public class Bishop extends Piece {
         assert imageURL != null;
         return new ImageIcon(imageURL);
     }
+
+    @Override
+    public int getValue() {
+        return 30;
+    }
 }

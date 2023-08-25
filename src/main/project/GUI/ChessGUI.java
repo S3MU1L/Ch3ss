@@ -26,6 +26,7 @@ public class ChessGUI {
     private final JFrame frame;
     private final JPanel chessPanel;
     private final Board board;
+    private final JTextArea movesNotationArea;
     private Coordinates firstClick = null;
     private List<Coordinates> possibleMoves = null;
     private GameState gameState = PLAYING;
@@ -36,7 +37,7 @@ public class ChessGUI {
         this.board = board;
         frame = new JFrame("Chess");
         frame.setLocationRelativeTo(null);
-        frame.setSize(700, 700);
+        frame.setSize(WIDTH, HEIGHT);
         frame.setLayout(new BorderLayout());
 
         JLabel opponentTime = new JLabel(millisecondsToString(getBoard().getOppositePlayer().getTimeLeft()));
@@ -53,6 +54,17 @@ public class ChessGUI {
         myTime.setFont(timeFont);
         myTime.setHorizontalAlignment(SwingConstants.CENTER);
         frame.add(myTime, BorderLayout.SOUTH);
+
+        movesNotationArea = new JTextArea();
+        movesNotationArea.setEditable(false);
+        movesNotationArea.setLineWrap(true);
+        movesNotationArea.setWrapStyleWord(true);
+        movesNotationArea.setBackground(new Color(58, 50, 55));
+        movesNotationArea.setForeground(Color.white);
+
+        JScrollPane scrollPane = new JScrollPane(movesNotationArea);
+        scrollPane.setPreferredSize(new Dimension(125, 400));
+        frame.add(scrollPane, BorderLayout.EAST);
 
         timer = new Timer(250, e -> {
             getBoard().getCurrentPlayer().decrementTime();
@@ -164,6 +176,11 @@ public class ChessGUI {
         frame.pack();
     }
 
+    public void writeMovesNotation() {
+        List<String> historyOfMoves = getBoard().getHistoryOfMoves();
+        movesNotationArea.append(historyOfMoves.get(historyOfMoves.size() - 1));
+    }
+
     public void handleBotPlayer() {
         Random random = new Random();
         List<Piece> pieces = board.getPiecesOfColor(board.getCurrentColor());
@@ -178,6 +195,7 @@ public class ChessGUI {
 
         randomIndex = random.nextInt(possibleMoves.size());
         randPiece.move(possibleMoves.get(randomIndex));
+        writeMovesNotation();
         drawBoard();
     }
 

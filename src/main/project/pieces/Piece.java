@@ -44,9 +44,12 @@ public abstract class Piece {
 
     public abstract ImageIcon getImageIcon();
 
+    public abstract int getValue();
+
     public void move(Coordinates coords) {
         move(coords.x(), coords.y());
         board.changeCurrentPlayer();
+        board.getHistoryOfMoves().add(board.moveToNotation(this, coords.x(), coords.y()));
 
         List<Piece> pieces = board.getPiecesOfColor(board.getCurrentColor());
         for (Piece piece : pieces) {

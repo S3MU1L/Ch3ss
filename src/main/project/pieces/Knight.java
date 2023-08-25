@@ -61,6 +61,11 @@ public class Knight extends Piece {
     }
 
     @Override
+    public int getValue() {
+        return 30;
+    }
+
+    @Override
     public String toString() {
         return getColor().equals(Color.WHITE) ? "♞" : "♘";
     }

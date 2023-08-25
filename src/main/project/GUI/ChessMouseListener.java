@@ -53,12 +53,13 @@ public class ChessMouseListener implements MouseListener {
         Coordinates coords = new Coordinates(x, y);
 
         if (gui.getPossibleMoves() != null && gui.getPossibleMoves().contains(coords)) {
+            gui.getBoard().getPieceAtCoordinates(gui.getFirstClick()).move(coords);
+            gui.writeMovesNotation();
             if (gui.getBoard().isEmpty(coords)) {
                 SoundPlayer.playMoveSound();
             } else {
                 SoundPlayer.playCaptureSound();
             }
-            gui.getBoard().getPieceAtCoordinates(gui.getFirstClick()).move(coords);
             gui.setFirstClick(null);
             gui.setPossibleMoves(null);
             gui.resetTimerTick();

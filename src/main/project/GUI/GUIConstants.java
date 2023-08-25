@@ -16,4 +16,6 @@ public class GUIConstants {
     public static final Font WELCOME_FONT = new Font("Comic-sans", Font.BOLD, 20);
     public static final int PADDING = 20;
     public static final int NORTH_PADDING = 200;
+    public static final int WIDTH = 700;
+    public static final int HEIGHT = 700;
 }

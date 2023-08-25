@@ -133,6 +133,11 @@ public class King extends Piece {
     }
 
     @Override
+    public int getValue() {
+        return 900;
+    }
+
+    @Override
     public String toString() {
         return getColor().equals(Color.WHITE) ? "♚" : "♔";
     }

@@ -50,6 +50,11 @@ public class Queen extends Piece {
     }
 
     @Override
+    public int getValue() {
+        return 90;
+    }
+
+    @Override
     public String toString() {
         return getColor().equals(Color.WHITE) ? "♛" : "♕";
     }

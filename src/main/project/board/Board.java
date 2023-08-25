@@ -10,6 +10,7 @@ import src.main.project.pieces.Rook;
 import src.main.project.players.Player;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -24,6 +25,7 @@ public class Board {
     private Player currentPlayer;
     private final Player player1;
     private final Player player2;
+    private final List<String> historyOfMoves = new ArrayList<>();
 
     public Board(Player player1, Player player2) {
         this.player1 = player1;
@@ -59,6 +61,9 @@ public class Board {
         }
     }
 
+    public List<String> getHistoryOfMoves() {
+        return historyOfMoves;
+    }
 
     public void initializeBoard() {
         for (int x = 0; x < BOARD_SIZE; x++) {
@@ -147,6 +152,28 @@ public class Board {
         Coordinates coords = getCoordinatesOfPiece(piece);
         putPiece(null, coords.x(), coords.y());
         putPiece(piece, x, y);
+        historyOfMoves.add(moveToNotation(piece, x, y));
+    }
+
+    public String moveToNotation(Piece piece, int x, int y) {
+        StringBuilder sb = new StringBuilder();
+        if (piece.getColor().equals(src.main.project.board.Color.WHITE)) {
+            sb.append(((historyOfMoves.size() / 2) + 1)).append(". ");
+        }
+
+        sb.append(piece);
+        int row = BOARD_SIZE - y;
+        String moveCoords = String.format("%c%d", ('a' + x), row);
+        sb.append(moveCoords);
+
+        if (getOppositePlayer().getColor().equals(src.main.project.board.Color.WHITE)) {
+            String padding = "  ";
+            sb.append(padding);
+        } else {
+            sb.append(System.lineSeparator());
+        }
+
+        return sb.toString();
     }
 
     public boolean isEmpty(int x, int y) {
