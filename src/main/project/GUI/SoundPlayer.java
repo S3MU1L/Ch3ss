@@ -3,6 +3,7 @@ package src.main.project.GUI;
 import javax.sound.sampled.AudioInputStream;
 import javax.sound.sampled.AudioSystem;
 import javax.sound.sampled.Clip;
+import javax.sound.sampled.LineEvent;
 import javax.sound.sampled.LineUnavailableException;
 import javax.sound.sampled.UnsupportedAudioFileException;
 import java.io.File;
@@ -25,7 +26,14 @@ public class SoundPlayer {
             URL soundURL = SoundPlayer.class.getResource(File.separator + soundPath);
             AudioInputStream audioInputStream = AudioSystem.getAudioInputStream(soundURL);
             Clip clip = AudioSystem.getClip();
+
             clip.open(audioInputStream);
+            clip.addLineListener(event -> {
+                if (event.getType() == LineEvent.Type.STOP) {
+                    event.getLine().close();
+                }
+            });
+
             clip.start();
         } catch (UnsupportedAudioFileException | IOException | LineUnavailableException e) {
             e.printStackTrace();
