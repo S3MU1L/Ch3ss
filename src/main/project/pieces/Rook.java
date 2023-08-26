@@ -16,6 +16,28 @@ import java.util.List;
 public class Rook extends Piece {
     private boolean moved = false;
 
+    private static final int[][] BROOK_POSITION_TABLE = {
+            {0, 0, 0, 0, 0, 0, 0, 0},
+            {5, 10, 10, 10, 10, 10, 10, 5},
+            {-5, 0, 0, 0, 0, 0, 0, -5},
+            {-5, 0, 0, 0, 0, 0, 0, -5},
+            {-5, 0, 0, 0, 0, 0, 0, -5},
+            {-5, 0, 0, 0, 0, 0, 0, -5},
+            {-5, 0, 0, 0, 0, 0, 0, -5},
+            {0, 0, 0, 5, 5, 0, 0, 0}
+    };
+
+    private static final int[][] WROOK_POSITION_TABLE = {
+            {0, 0, 0, 5, 5, 0, 0, 0},
+            {-5, 0, 0, 0, 0, 0, 0, -5},
+            {-5, 0, 0, 0, 0, 0, 0, -5},
+            {-5, 0, 0, 0, 0, 0, 0, -5},
+            {-5, 0, 0, 0, 0, 0, 0, -5},
+            {-5, 0, 0, 0, 0, 0, 0, -5},
+            {5, 10, 10, 10, 10, 10, 10, 5},
+            {0, 0, 0, 0, 0, 0, 0, 0}
+    };
+
     public Rook(Color color, Board board) {
         super(color, board);
     }
@@ -63,7 +85,12 @@ public class Rook extends Piece {
 
     @Override
     public int getValue() {
-        return 50;
+        return 500;
+    }
+
+    @Override
+    public int[][] getPositionTable() {
+        return getColor().equals(Color.WHITE) ? WROOK_POSITION_TABLE : BROOK_POSITION_TABLE;
     }
 
     @Override

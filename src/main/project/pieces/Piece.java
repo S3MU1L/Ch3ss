@@ -46,6 +46,8 @@ public abstract class Piece {
 
     public abstract int getValue();
 
+    public abstract int[][] getPositionTable();
+
     public void move(Coordinates coords) {
         move(coords.x(), coords.y());
         board.changeCurrentPlayer();

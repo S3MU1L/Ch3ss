@@ -3,6 +3,7 @@ package src.main.project.GUI;
 import src.main.project.board.Board;
 import src.main.project.board.Coordinates;
 import src.main.project.board.GameState;
+import src.main.project.engine.Evaluator;
 import src.main.project.pieces.Pawn;
 import src.main.project.pieces.Piece;
 import src.main.project.pieces.Queen;
@@ -14,6 +15,7 @@ import java.awt.*;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
+import java.util.Set;
 
 import static src.main.project.GUI.GUIConstants.*;
 import static src.main.project.board.GameState.CHECK;
@@ -182,19 +184,7 @@ public class ChessGUI {
     }
 
     public void handleBotPlayer() {
-        Random random = new Random();
-        List<Piece> pieces = board.getPiecesOfColor(board.getCurrentColor());
-        int randomIndex;
-        Piece randPiece;
-        ArrayList<Coordinates> possibleMoves;
-        do {
-            randomIndex = random.nextInt(pieces.size());
-            randPiece = pieces.get(randomIndex);
-            possibleMoves = new ArrayList<>(board.getSafeMovesOfPiece(randPiece));
-        } while (possibleMoves.isEmpty());
-
-        randomIndex = random.nextInt(possibleMoves.size());
-        randPiece.move(possibleMoves.get(randomIndex));
+        Evaluator.makeBestMove(board);
         writeMovesNotation();
         drawBoard();
     }

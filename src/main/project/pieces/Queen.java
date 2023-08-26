@@ -15,6 +15,16 @@ import java.util.List;
  * @author Samuel Malec
  */
 public class Queen extends Piece {
+    private static final int[][] QUEEN_POSITION_TABLE = {
+            {-20, -10, -10, -5, -5, -10, -10, -20},
+            {-10, 0, 0, 0, 0, 0, 0, -10},
+            {-10, 0, 5, 5, 5, 5, 0, -10},
+            {-5, 0, 5, 5, 5, 5, 0, -5},
+            {-5, 0, 5, 5, 5, 5, 0, -5},
+            {-10, 0, 5, 5, 5, 5, 0, -10},
+            {-10, 0, 0, 0, 0, 0, 0, -10},
+            {-20, -10, -10, -5, -5, -10, -10, -20}
+    };
 
     public Queen(Color color, Board board) {
         super(color, board);
@@ -51,7 +61,12 @@ public class Queen extends Piece {
 
     @Override
     public int getValue() {
-        return 90;
+        return 900;
+    }
+
+    @Override
+    public int[][] getPositionTable() {
+        return QUEEN_POSITION_TABLE;
     }
 
     @Override

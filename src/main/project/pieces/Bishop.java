@@ -13,6 +13,28 @@ import java.util.List;
  * @author Samuel Malec
  */
 public class Bishop extends Piece {
+    private static final int[][] BBISHOP_POSITION_TABLE = {
+            {-20, -10, -10, -10, -10, -10, -10, -20},
+            {-10, 5, 0, 0, 0, 0, 5, -10},
+            {-10, 10, 10, 10, 10, 10, 10, -10},
+            {-10, 0, 10, 10, 10, 10, 0, -10},
+            {-10, 5, 5, 10, 10, 5, 5, -10},
+            {-10, 0, 5, 10, 10, 5, 0, -10},
+            {-10, 0, 0, 0, 0, 0, 0, -10},
+            {-20, -10, -10, -10, -10, -10, -10, -20}
+    };
+
+    private static final int[][] WBISHOP_POSITION_TABLE = {
+            {-20, -10, -10, -10, -10, -10, -10, -20},
+            {-10, 0, 0, 0, 0, 0, 0, -10},
+            {-10, 0, 5, 10, 10, 5, 0, -10},
+            {-10, 5, 5, 10, 10, 5, 5, -10},
+            {-10, 0, 10, 10, 10, 10, 0, -10},
+            {-10, 10, 10, 10, 10, 10, 10, -10},
+            {-10, 5, 0, 0, 0, 0, 5, -10},
+            {-20, -10, -10, -10, -10, -10, -10, -20}
+    };
+
     public Bishop(Color color, Board board) {
         super(color, board);
     }
@@ -61,6 +83,11 @@ public class Bishop extends Piece {
 
     @Override
     public int getValue() {
-        return 30;
+        return 330;
+    }
+
+    @Override
+    public int[][] getPositionTable() {
+        return getColor().equals(Color.WHITE) ? WBISHOP_POSITION_TABLE : BBISHOP_POSITION_TABLE;
     }
 }

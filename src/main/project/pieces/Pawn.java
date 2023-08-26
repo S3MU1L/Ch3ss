@@ -16,6 +16,28 @@ public class Pawn extends Piece {
     private boolean firstMove = true;
     private boolean enPassantPossible = false;
 
+    private static final int[][] BPAWN_POSITION_TABLE = {
+            {0, 0, 0, 0, 0, 0, 0, 0},
+            {50, 50, 50, 50, 50, 50, 50, 50},
+            {10, 10, 20, 30, 30, 20, 10, 10},
+            {5, 5, 10, 25, 25, 10, 5, 5},
+            {0, 0, 0, 20, 20, 0, 0, 0},
+            {5, -5, -10, 0, 0, -10, -5, 5},
+            {5, 10, 10, -20, -20, 10, 10, 5},
+            {1000, 1000, 1000, 1000, 1000, 1000, 1000, 1000}
+    };
+
+    private static final int[][] WPAWN_POSITION_TABLE = {
+            {1000, 1000, 1000, 1000, 1000, 1000, 1000, 1000},
+            {5, 10, 10, -20, -20, 10, 10, 5},
+            {5, -5, -10, 0, 0, -10, -5, 5},
+            {0, 0, 0, 20, 20, 0, 0, 0},
+            {5, 5, 10, 25, 25, 10, 5, 5},
+            {10, 10, 20, 30, 30, 20, 10, 10},
+            {50, 50, 50, 50, 50, 50, 50, 50},
+            {0, 0, 0, 0, 0, 0, 0, 0}
+    };
+
     public Pawn(Color color, Board board) {
         super(color, board);
     }
@@ -106,6 +128,11 @@ public class Pawn extends Piece {
 
     @Override
     public int getValue() {
-        return 10;
+        return 100;
+    }
+
+    @Override
+    public int[][] getPositionTable() {
+        return getColor().equals(Color.WHITE) ? WPAWN_POSITION_TABLE : BPAWN_POSITION_TABLE;
     }
 }

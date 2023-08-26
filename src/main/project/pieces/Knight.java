@@ -13,6 +13,27 @@ import java.util.List;
  * @author Samuel Malec
  */
 public class Knight extends Piece {
+    private static final int[][] WKNIGHT_POSITION_TABLE = {
+            {-50, -40, -30, -30, -30, -30, -40, -50},
+            {-40, -20, 0, 0, 0, 0, -20, -40},
+            {-30, 0, 10, 15, 15, 10, 0, -30},
+            {-30, 5, 15, 20, 20, 15, 5, -30},
+            {-30, 0, 15, 20, 20, 15, 0, -30},
+            {-30, 5, 10, 15, 15, 10, 5, -30},
+            {-40, -20, 0, 5, 5, 0, -20, -40},
+            {-50, -40, -30, -30, -30, -30, -40, -50}
+    };
+
+    private static final int[][] BKNIGHT_POSITION_TABLE = {
+            {-50, -40, -30, -30, -30, -30, -40, -50},
+            {-40, -20, 0, 0, 0, 0, -20, -40},
+            {-30, 0, 10, 15, 15, 10, 0, -30},
+            {-30, 5, 15, 20, 20, 15, 5, -30},
+            {-30, 0, 15, 20, 20, 15, 0, -30},
+            {-30, 5, 10, 15, 15, 10, 5, -30},
+            {-40, -20, 0, 5, 5, 0, -20, -40},
+            {-50, -40, -30, -30, -30, -30, -40, -50}
+    };
 
     public Knight(Color color, Board board) {
         super(color, board);
@@ -62,7 +83,12 @@ public class Knight extends Piece {
 
     @Override
     public int getValue() {
-        return 30;
+        return 320;
+    }
+
+    @Override
+    public int[][] getPositionTable() {
+        return getColor().equals(Color.WHITE) ? WKNIGHT_POSITION_TABLE : BKNIGHT_POSITION_TABLE;
     }
 
     @Override

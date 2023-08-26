@@ -17,6 +17,28 @@ import java.util.Set;
 public class King extends Piece {
     private boolean hasMoved = false;
 
+    private static final int[][] WKING_POSITION_TABLE = {
+            {-30, -40, -40, -50, -50, -40, -40, -30},
+            {-30, -40, -40, -50, -50, -40, -40, -30},
+            {-30, -40, -40, -50, -50, -40, -40, -30},
+            {-30, -40, -40, -50, -50, -40, -40, -30},
+            {-20, -30, -30, -40, -40, -30, -30, -20},
+            {-10, -20, -20, -20, -20, -20, -20, -10},
+            {20, 20, 0, 0, 0, 0, 20, 20},
+            {20, 30, 10, 0, 0, 10, 30, 20},
+    };
+
+    private static final int[][] BKING_POSITION_TABLE = {
+            {20, 30, 10, 0, 0, 10, 30, 20},
+            {20, 20, 0, 0, 0, 0, 20, 20},
+            {-10, -20, -20, -20, -20, -20, -20, -10},
+            {-20, -30, -30, -40, -40, -30, -30, -20},
+            {-30, -40, -40, -50, -50, -40, -40, -30},
+            {-30, -40, -40, -50, -50, -40, -40, -30},
+            {-30, -40, -40, -50, -50, -40, -40, -30},
+            {-30, -40, -40, -50, -50, -40, -40, -30},
+    };
+
     public King(Color color, Board board) {
         super(color, board);
     }
@@ -134,7 +156,12 @@ public class King extends Piece {
 
     @Override
     public int getValue() {
-        return 900;
+        return 20000;
+    }
+
+    @Override
+    public int[][] getPositionTable() {
+        return getColor().equals(Color.WHITE) ? WKING_POSITION_TABLE : BKING_POSITION_TABLE;
     }
 
     @Override
