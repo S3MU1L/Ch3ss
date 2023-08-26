@@ -20,6 +20,8 @@ public class BotButtonListener implements ActionListener {
     @Override
     public void actionPerformed(ActionEvent e) {
         frame.dispose();
-        GuiStarter.startGUI(GameType.BOT_VS_HUMAN);
+        SwingUtilities.invokeLater(() -> {
+            GuiStarter.startGUI(GameType.BOT_VS_HUMAN);
+        });
     }
 }
